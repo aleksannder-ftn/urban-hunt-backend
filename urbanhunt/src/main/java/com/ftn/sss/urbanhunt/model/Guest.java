@@ -1,5 +1,6 @@
 package com.ftn.sss.urbanhunt.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,15 @@ import java.util.Map;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name="guest")
 public class Guest extends User {
 
+   @ElementCollection
+   @CollectionTable(name = "guest_real_estate_rating", joinColumns = @JoinColumn(name = "guest_id"))
+   @MapKeyJoinColumn(name = "real_estate_id")
+   @Column(name = "is_liked")
    private Map<RealEstate, Boolean> realEstateRating;
 }
