@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 
 public interface AuthService {
 
-    GuestBasicDTO registerGuest(GuestBasicDTO guest);
+    Guest registerGuest(Guest guest);
     Guest loginGuest(String username, String password);
 
     Agent registerAgent(Agent agent);

@@ -1,6 +1,7 @@
 package com.ftn.sss.urbanhunt.controller;
 
 import com.ftn.sss.urbanhunt.dto.guest.GuestBasicDTO;
+import com.ftn.sss.urbanhunt.dto.mapper.GuestMapper;
 import com.ftn.sss.urbanhunt.model.Guest;
 import com.ftn.sss.urbanhunt.service.interfaces.AuthService;
 import com.ftn.sss.urbanhunt.service.interfaces.GuestService;
@@ -28,7 +29,10 @@ public class AuthenticationController {
     @PostMapping(value="/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GuestBasicDTO> registerGuest(@RequestBody(required = true) GuestBasicDTO guestBasicDTO) {
         try {
-            return new ResponseEntity<>(authService.registerGuest(guestBasicDTO), HttpStatus.OK);
+            Guest guest = GuestMapper.toGuestEntity(guestBasicDTO);
+            guest.setActive(true);
+            Guest newGuest = authService.registerGuest(guest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(GuestMapper.toGuestBasicDTO(newGuest));
         } catch (InvalidParameterException | NullPointerException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

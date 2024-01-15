@@ -21,7 +21,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public GuestBasicDTO registerGuest(GuestBasicDTO guest) {
+    public Guest registerGuest(Guest guest) {
         entityManager.persist(guest);
         return guest;
     }

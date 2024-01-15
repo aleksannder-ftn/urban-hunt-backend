@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public GuestBasicDTO registerGuest(GuestBasicDTO guest) {
+    public Guest registerGuest(Guest guest) {
         try {
             return authRepository.registerGuest(guest);
         } catch (Exception e) {

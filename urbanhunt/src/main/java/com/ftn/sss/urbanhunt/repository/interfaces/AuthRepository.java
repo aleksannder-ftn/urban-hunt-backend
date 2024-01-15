@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface AuthRepository {
 
     // Guest
-    GuestBasicDTO registerGuest(GuestBasicDTO guest);
+    Guest registerGuest(Guest guest);
 
     @Query("SELECT g FROM Guest g WHERE g.username = :username AND g.password = :password AND g.active = true")
     Guest loginGuest(@Param("username") String username, @Param("password") String password);
