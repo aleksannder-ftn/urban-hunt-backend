@@ -17,7 +17,6 @@ import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
-@RequestMapping("/findAllGuests")
 public class GuestController {
 
     private final GuestService guestService;
@@ -27,7 +26,7 @@ public class GuestController {
         this.guestService = guestService;
     }
 
-    @GetMapping
+    @GetMapping("/findAllGuests")
     public ResponseEntity<List<GuestBasicDTO>> getAllGuests() {
         List<Guest> guests = guestService.getAllGuests();
         List<GuestBasicDTO> guestsBasicDTO = guests.stream()

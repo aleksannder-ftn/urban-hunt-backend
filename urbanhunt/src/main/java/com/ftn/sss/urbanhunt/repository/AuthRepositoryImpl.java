@@ -7,6 +7,7 @@ import com.ftn.sss.urbanhunt.model.Guest;
 import com.ftn.sss.urbanhunt.model.Owner;
 import com.ftn.sss.urbanhunt.repository.interfaces.AuthRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,7 @@ public class AuthRepositoryImpl implements AuthRepository {
         this.entityManager = entityManager;
     }
 
+    @Transactional
     @Override
     public Guest registerGuest(Guest guest) {
         entityManager.persist(guest);
