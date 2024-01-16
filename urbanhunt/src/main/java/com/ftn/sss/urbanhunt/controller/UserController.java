@@ -55,7 +55,8 @@ public class UserController {
     @PostMapping(value="/deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deactivateUser(@RequestBody Map<String, Object> payload) {
         Role userRole = Role.valueOf((String) payload.get("role"));
-        Long userId = Long.parseLong((String) payload.get("id"));
+        Integer id = (Integer) payload.get("id");
+        Long userId = Long.valueOf(id);
 
         switch (userRole) {
             case GUEST:

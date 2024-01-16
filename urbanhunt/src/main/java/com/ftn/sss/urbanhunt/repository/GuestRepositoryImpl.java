@@ -3,6 +3,7 @@ package com.ftn.sss.urbanhunt.repository;
 import com.ftn.sss.urbanhunt.model.Guest;
 import com.ftn.sss.urbanhunt.repository.interfaces.GuestRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -33,8 +34,7 @@ public class GuestRepositoryImpl implements GuestRepository {
     @Override
     @Transactional
     public int deactivateGuest(Guest guest) {
-        TypedQuery<Guest> query =
-                entityManager.createQuery("UPDATE Guest g SET g.active = false WHERE g.id = :id", Guest.class);
+        Query query = entityManager.createQuery("UPDATE Guest SET active = false WHERE id = :id");
         query.setParameter("id", guest.getId());
         return query.executeUpdate();
     }
