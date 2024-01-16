@@ -10,4 +10,6 @@ public interface AgentService {
     Agent getAgentById(Long id);
 
     int deactivateAgent(Agent agent);
+
+    int activateAgent(Agent agent);
 }

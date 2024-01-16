@@ -11,4 +11,6 @@ public interface GuestRepository {
 
     int deactivateGuest(Guest guest);
 
+    int activateGuest(Guest guest);
+
 }

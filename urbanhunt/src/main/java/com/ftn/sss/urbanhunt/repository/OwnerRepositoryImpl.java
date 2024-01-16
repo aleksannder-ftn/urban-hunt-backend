@@ -4,6 +4,7 @@ import com.ftn.sss.urbanhunt.model.Owner;
 import com.ftn.sss.urbanhunt.repository.interfaces.OwnerRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,9 +35,18 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     @Override
     @Transactional
     public int deactivateOwner(Owner owner) {
-        TypedQuery<Owner> query =
-                entityManager.createQuery("UPDATE Owner o SET o.active = false WHERE o.id = :id", Owner.class);
+        Query query = entityManager.createQuery("UPDATE Owner SET active = false WHERE id = :id");
         query.setParameter("id", owner.getId());
         return query.executeUpdate();
     }
+
+    @Override
+    @Transactional
+    public int activateOwner(Owner owner) {
+        Query query =  entityManager.createQuery("UPDATE Owner SET active = true WHERE id = :id");
+        query.setParameter("id", owner.getId());
+        return query.executeUpdate();
+    }
+
+
 }

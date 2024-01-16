@@ -10,4 +10,6 @@ public interface OwnerRepository {
     Owner getOwnerById(Long id);
 
     int deactivateOwner(Owner owner);
+
+    int activateOwner(Owner owner);
 }

@@ -11,4 +11,6 @@ public interface GuestService {
     Guest getGuestById(Long id);
 
     int deactivateGuest(Guest guest);
+
+    int activateGuest(Guest guest);
 }

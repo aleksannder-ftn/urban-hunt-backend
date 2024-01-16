@@ -44,5 +44,14 @@ public class OwnerServiceImpl implements OwnerService {
         }
     }
 
+    @Override
+    public int activateOwner(Owner owner) {
+        try {
+            return ownerRepository.activateOwner(owner);
+        } catch (Exception e) {
+            throw null;
+        }
+    }
+
 
 }

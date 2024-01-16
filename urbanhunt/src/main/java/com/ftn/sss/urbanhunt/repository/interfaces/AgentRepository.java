@@ -11,4 +11,5 @@ public interface AgentRepository {
 
     int deactivateAgent(Agent agent);
 
+    int activateAgent(Agent agent);
 }

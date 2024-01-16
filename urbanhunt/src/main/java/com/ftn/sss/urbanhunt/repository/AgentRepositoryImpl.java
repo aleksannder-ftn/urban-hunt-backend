@@ -3,6 +3,7 @@ package com.ftn.sss.urbanhunt.repository;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.repository.interfaces.AgentRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -33,8 +34,15 @@ public class AgentRepositoryImpl implements AgentRepository {
     @Override
     @Transactional
     public int deactivateAgent(Agent agent) {
-        TypedQuery<Agent> query =
-                entityManager.createQuery("UPDATE Agent a SET a.active = false WHERE a.id = :id", Agent.class);
+        Query query = entityManager.createQuery("UPDATE Agent a SET a.active = false WHERE a.id = :id");
+        query.setParameter("id", agent.getId());
+        return query.executeUpdate();
+    }
+
+    @Override
+    @Transactional
+    public int activateAgent(Agent agent) {
+        Query query = entityManager.createQuery("UPDATE Agent a SET a.active = true WHERE a.id = :id");
         query.setParameter("id", agent.getId());
         return query.executeUpdate();
     }

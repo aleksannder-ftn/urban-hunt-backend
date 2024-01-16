@@ -38,4 +38,12 @@ public class GuestRepositoryImpl implements GuestRepository {
         query.setParameter("id", guest.getId());
         return query.executeUpdate();
     }
+
+    @Override
+    @Transactional
+    public int activateGuest(Guest guest) {
+        Query query =  entityManager.createQuery("UPDATE Guest SET active = true WHERE id = :id");
+        query.setParameter("id", guest.getId());
+        return query.executeUpdate();
+    }
 }

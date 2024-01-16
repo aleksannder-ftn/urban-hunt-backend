@@ -10,4 +10,7 @@ public interface OwnerService {
     Owner getOwnerById(Long id);
 
     int deactivateOwner(Owner owner);
+
+    int activateOwner(Owner owner);
+
 }

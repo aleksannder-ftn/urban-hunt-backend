@@ -47,4 +47,13 @@ public class GuestServiceImpl implements GuestService {
             throw null;
         }
     }
+
+    @Override
+    public int activateGuest(Guest guest) {
+        try {
+            return guestRepository.activateGuest(guest);
+        } catch (Exception e) {
+            throw null;
+        }
+    }
 }

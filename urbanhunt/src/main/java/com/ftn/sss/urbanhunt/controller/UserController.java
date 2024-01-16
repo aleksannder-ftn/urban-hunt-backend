@@ -75,4 +75,28 @@ public class UserController {
                 return new ResponseEntity<>("Invalid role", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(value="/activateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> activateUser(@RequestBody Map<String, Object> payload) {
+        Role userRole = Role.valueOf((String) payload.get("role"));
+        Integer id = (Integer) payload.get("id");
+        Long userId = Long.valueOf(id);
+
+        switch (userRole) {
+            case GUEST:
+                Guest guest = guestService.getGuestById(userId);
+                guestService.activateGuest(guest);
+                return new ResponseEntity<>("Guest activated", HttpStatus.OK);
+            case OWNER:
+                Owner owner = ownerService.getOwnerById(userId);
+                ownerService.activateOwner(owner);
+                return new ResponseEntity<>("Owner activated", HttpStatus.OK);
+            case AGENT:
+                Agent agent = agentService.getAgentById(userId);
+                agentService.activateAgent(agent);
+                return new ResponseEntity<>("Agent activated", HttpStatus.OK);
+            default:
+                return new ResponseEntity<>("Invalid role", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

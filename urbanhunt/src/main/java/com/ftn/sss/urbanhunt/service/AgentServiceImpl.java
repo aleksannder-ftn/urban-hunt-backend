@@ -45,4 +45,13 @@ public class AgentServiceImpl implements AgentService {
             throw null;
         }
     }
+
+    @Override
+    public int activateAgent(Agent agent) {
+        try {
+            return agentRepository.activateAgent(agent);
+        } catch (Exception e) {
+            throw null;
+        }
+    }
 }
