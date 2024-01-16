@@ -30,4 +30,24 @@ public class Agent extends  User{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="agency_id", nullable = false)
     private Agency agency;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }

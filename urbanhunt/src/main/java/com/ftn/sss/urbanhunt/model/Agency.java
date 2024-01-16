@@ -21,6 +21,9 @@ public class Agency {
     @Column(name="agency_id")
     private Long id;
 
+    @Column(name="agency_name", nullable = false)
+    private String name;
+
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Tour> tours = new ArrayList<>();
 

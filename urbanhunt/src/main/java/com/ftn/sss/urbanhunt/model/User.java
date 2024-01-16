@@ -3,6 +3,12 @@ package com.ftn.sss.urbanhunt.model;
 import com.ftn.sss.urbanhunt.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -10,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class User {
+public abstract class User implements UserDetails {
 
     @Column(name="user_id")
     @Id
@@ -46,4 +52,10 @@ public abstract class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<Role> roles = new ArrayList<>();
+        roles.add(this.role);
+        return roles;
+    }
 }

@@ -21,4 +21,24 @@ public class Guest extends User {
    @MapKeyJoinColumn(name = "real_estate_id")
    @Column(name = "is_liked")
    private Map<RealEstate, Boolean> realEstateRating;
+
+   @Override
+   public boolean isAccountNonExpired() {
+      return false;
+   }
+
+   @Override
+   public boolean isAccountNonLocked() {
+      return false;
+   }
+
+   @Override
+   public boolean isCredentialsNonExpired() {
+      return false;
+   }
+
+   @Override
+   public boolean isEnabled() {
+      return false;
+   }
 }
