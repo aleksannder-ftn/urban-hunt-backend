@@ -14,12 +14,13 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Entity
 @Table(name="agent")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Agent extends  User{
 
     @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ArrayList<Tour> tours;
 
-    @Column(name="average_rating", nullable = false)
+    @Column(name="average_rating", nullable = true)
     @JoinColumn(name = "average_rating")
     private float averageRating;
 
