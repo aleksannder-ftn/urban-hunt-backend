@@ -7,4 +7,8 @@ public interface GuestRepository {
     // Basic CRUD
     List<Guest> getAllGuests();
 
+    Guest getGuestById(Long id);
+
+    int deactivateGuest(Guest guest);
+
 }

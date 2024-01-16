@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,5 +23,19 @@ public class GuestRepositoryImpl implements GuestRepository {
     public List<Guest> getAllGuests() {
         TypedQuery<Guest> query = entityManager.createQuery("SELECT g FROM Guest g", Guest.class);
         return query.getResultList();
+    }
+
+    @Override
+    public Guest getGuestById(Long id) {
+        return entityManager.find(Guest.class, id);
+    }
+
+    @Override
+    @Transactional
+    public int deactivateGuest(Guest guest) {
+        TypedQuery<Guest> query =
+                entityManager.createQuery("UPDATE Guest g SET g.active = false WHERE g.id = :id", Guest.class);
+        query.setParameter("id", guest.getId());
+        return query.executeUpdate();
     }
 }

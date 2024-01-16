@@ -7,4 +7,8 @@ import java.util.List;
 public interface GuestService {
 
     List<Guest> getAllGuests();
+
+    Guest getGuestById(Long id);
+
+    int deactivateGuest(Guest guest);
 }

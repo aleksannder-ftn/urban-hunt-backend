@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface OwnerService {
     List<Owner> getAllOwners();
+
+    Owner getOwnerById(Long id);
+
+    int deactivateOwner(Owner owner);
 }

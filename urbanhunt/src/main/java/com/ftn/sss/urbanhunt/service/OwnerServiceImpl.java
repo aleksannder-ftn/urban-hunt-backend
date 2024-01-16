@@ -25,4 +25,24 @@ public class OwnerServiceImpl implements OwnerService {
             throw null;
         }
     }
+
+    @Override
+    public Owner getOwnerById(Long id) {
+        try {
+            return ownerRepository.getOwnerById(id);
+        } catch (Exception e) {
+            throw null;
+        }
+    }
+
+    @Override
+    public int deactivateOwner(Owner owner) {
+        try {
+            return ownerRepository.deactivateOwner(owner);
+        } catch (Exception e) {
+            throw null;
+        }
+    }
+
+
 }

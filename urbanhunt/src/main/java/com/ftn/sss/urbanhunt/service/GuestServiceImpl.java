@@ -29,4 +29,22 @@ public class GuestServiceImpl implements GuestService {
             throw null;
         }
     }
+
+    @Override
+    public Guest getGuestById(Long id) {
+        try {
+            return guestRepository.getGuestById(id);
+        } catch (Exception e) {
+            throw null;
+        }
+    }
+
+    @Override
+    public int deactivateGuest(Guest guest) {
+        try {
+            return guestRepository.deactivateGuest(guest);
+        } catch (Exception e) {
+            throw null;
+        }
+    }
 }

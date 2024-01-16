@@ -7,17 +7,18 @@ import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.Guest;
 import com.ftn.sss.urbanhunt.model.Owner;
+import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
 import com.ftn.sss.urbanhunt.service.interfaces.GuestService;
 import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
@@ -49,5 +50,28 @@ public class UserController {
         ).toList();
 
         return new ResponseEntity<>(usersBasicDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(value="/deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deactivateUser(@RequestBody Map<String, Object> payload) {
+        Role userRole = Role.valueOf((String) payload.get("role"));
+        Long userId = Long.parseLong((String) payload.get("id"));
+
+        switch (userRole) {
+            case GUEST:
+                Guest guest = guestService.getGuestById(userId);
+                guestService.deactivateGuest(guest);
+                return new ResponseEntity<>("Guest deactivated", HttpStatus.OK);
+            case OWNER:
+                Owner owner = ownerService.getOwnerById(userId);
+                ownerService.deactivateOwner(owner);
+                return new ResponseEntity<>("Owner deactivated", HttpStatus.OK);
+            case AGENT:
+                Agent agent = agentService.getAgentById(userId);
+                agentService.deactivateAgent(agent);
+                return new ResponseEntity<>("Agent deactivated", HttpStatus.OK);
+            default:
+                return new ResponseEntity<>("Invalid role", HttpStatus.BAD_REQUEST);
+        }
     }
 }

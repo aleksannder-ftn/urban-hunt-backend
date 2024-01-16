@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface OwnerRepository {
     List<Owner> getAllOwners();
+
+    Owner getOwnerById(Long id);
+
+    int deactivateOwner(Owner owner);
 }
