@@ -10,7 +10,6 @@ import com.ftn.sss.urbanhunt.repository.interfaces.UserRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import java.util.List;
 import java.util.Optional;

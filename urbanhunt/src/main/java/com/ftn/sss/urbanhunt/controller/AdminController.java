@@ -2,10 +2,8 @@ package com.ftn.sss.urbanhunt.controller;
 
 import com.ftn.sss.urbanhunt.dto.mapper.UserMapper;
 import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
-import com.ftn.sss.urbanhunt.dto.user.UserTokenState;
 import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.Role;
-import com.ftn.sss.urbanhunt.security.TokenUtils;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,20 +14,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-@CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
-public class UserController {
+@RequestMapping(value="/admin")
+public class AdminController {
 
     private final UserService userService;
-    private final TokenUtils tokenUtils;
 
-
+    private final UserController userController;
     @Autowired
-    public UserController(UserService userService, TokenUtils tokenUtils) {
+    public AdminController(UserService userService, UserController userController) {
         this.userService = userService;
-        this.tokenUtils = tokenUtils;
+        this.userController = userController;
+    }
+
+    @GetMapping(value="/findAllUsers")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    public ResponseEntity<List<UserBasicDTO>> findAllUsers() {
+        List<User> allUsers = userService.getAllUsers();
+
+        List<UserBasicDTO> usersBasicDTO = allUsers.stream()
+                .map(UserMapper:: toUserBasicDTO)
+                .toList();
+
+        return new ResponseEntity<>(usersBasicDTO, HttpStatus.OK);
     }
 
     @PostMapping(value="/deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,32 +77,29 @@ public class UserController {
         }
     }
 
-    @PostMapping(value="/auth/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserBasicDTO> registerUser(@RequestBody UserBasicDTO userBasicDTO) {
+    @PostMapping(value="/createNewOwner", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    public ResponseEntity<UserBasicDTO> createNewOwner(@RequestBody UserBasicDTO userBasicDTO) {
         try {
-            User user = UserMapper.toUserEntity(userBasicDTO);
-            User newUser = userService.registerUser(UserMapper.toUserBasicDTO(user));
-            return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toUserBasicDTO(newUser));
+            return userController.registerUser(userBasicDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
+    @GetMapping("/findAllGuests")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    public ResponseEntity<List<UserBasicDTO>> getAllGuests() {
+        List<User> users = userService.getAllUsers();
 
-    @PostMapping(value="/auth/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserTokenState> loginUser(@RequestBody Map<String, Object> payload) {
-        String jwt = "";
-        Optional<User> user = userService.findUserByUsername(payload.get("username").toString());
-        String password = payload.get("password").toString();
-        if (user.isPresent()) {
-            if (password.matches(user.get().getPassword())) { // No password encoding for now. Password is stored as raw string.
-                jwt = tokenUtils.generateToken(user.get().getId());
-                long expiresIn = tokenUtils.getExpiredIn();
-                Role role = (Role) user.get().getAuthorities().stream().findFirst().orElse(null);
-                return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(new UserTokenState(jwt, 18000), HttpStatus.OK);
+        List<User> guests = users.stream()
+                .filter(user -> user.getRole() == Role.GUEST)
+                .toList();
+
+        List<UserBasicDTO> guestsBasicDTO = guests.stream()
+                .map(UserMapper:: toUserBasicDTO)
+                .toList();
+        return new ResponseEntity<>(guestsBasicDTO, HttpStatus.OK);
     }
 }

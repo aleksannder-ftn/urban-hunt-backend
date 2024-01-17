@@ -19,41 +19,4 @@ public class GuestServiceImpl implements GuestService {
     public GuestServiceImpl(GuestRepository guestRepository) {
         this.guestRepository = guestRepository;
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Guest> getAllGuests() {
-        try {
-            return guestRepository.getAllGuests();
-        } catch (Exception e) {
-            throw null;
-        }
-    }
-
-    @Override
-    public Guest getGuestById(Long id) {
-        try {
-            return guestRepository.getGuestById(id);
-        } catch (Exception e) {
-            throw null;
-        }
-    }
-
-    @Override
-    public int deactivateGuest(Guest guest) {
-        try {
-            return guestRepository.deactivateGuest(guest);
-        } catch (Exception e) {
-            throw null;
-        }
-    }
-
-    @Override
-    public int activateGuest(Guest guest) {
-        try {
-            return guestRepository.activateGuest(guest);
-        } catch (Exception e) {
-            throw null;
-        }
-    }
 }

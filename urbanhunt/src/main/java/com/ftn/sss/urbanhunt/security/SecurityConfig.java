@@ -3,6 +3,8 @@ package com.ftn.sss.urbanhunt.security;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +28,7 @@ import java.util.List;
 @EnableWebSecurity
 @Configuration
 @EnableScheduling
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
@@ -42,10 +45,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer :: disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/agent/**").hasRole("AGENT")
-                        .requestMatchers("/api/owner/**").hasRole("OWNER")
-                        .requestMatchers("/api/guest/**").hasRole("GUEST")
-                        .requestMatchers("/api/admin/**").hasRole("ADMINISTRATOR")
+                        .requestMatchers("/agent/**").hasRole("AGENT")
+                        .requestMatchers("/owner/**").hasRole("OWNER")
+                        .requestMatchers("/guest/**").hasRole("GUEST")
+                        .requestMatchers("/admin/**").hasRole("ADMINISTRATOR")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
