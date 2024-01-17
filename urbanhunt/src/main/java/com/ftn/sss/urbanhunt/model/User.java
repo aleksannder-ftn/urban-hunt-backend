@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,7 +16,9 @@ import java.util.Collection;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@MappedSuperclass
+@Entity
+@Table(name="user")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User implements UserDetails {
 
     @Column(name="user_id")

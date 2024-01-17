@@ -1,9 +1,11 @@
 package com.ftn.sss.urbanhunt.security;
 
+import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
 import com.ftn.sss.urbanhunt.service.interfaces.GuestService;
 import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
+import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,18 +27,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final TokenUtils jwtTokenUtil;
 
-    private final GuestService guestService;
-
-    private final AgentService agentService;
-
-    private final OwnerService ownerService;
+    private final UserService userService;
 
     @Autowired
-    public JwtTokenFilter(TokenUtils jwtTokenUtil, GuestService guestService, AgentService agentService, OwnerService ownerService) {
+    public JwtTokenFilter(TokenUtils jwtTokenUtil, UserService userService) {
         this.jwtTokenUtil = jwtTokenUtil;
-        this.guestService = guestService;
-        this.agentService = agentService;
-        this.ownerService = ownerService;
+        this.userService = userService;
     }
 
     @Override
@@ -57,51 +53,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         String tokenStr = jwtTokenUtil.getToken(request);
-        Role role = jwtTokenUtil.getRoleFromToken(tokenStr);
+        UserDetails userDetails = (UserDetails) userService.getUserById(jwtTokenUtil.getUsernameFromToken(tokenStr));
 
-        switch (role) {
-            case GUEST:
-                UserDetails guestDetails = guestService.getGuestById(jwtTokenUtil.getUsernameFromToken(tokenStr));
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null,
+                userDetails == null ?
+                        List.of() : userDetails.getAuthorities()
+        );
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        guestDetails, null,
-                        guestDetails == null ?
-                                List.of() : guestDetails.getAuthorities()
-                );
+        authentication.setDetails(
+                new WebAuthenticationDetailsSource().buildDetails(request)
+        );
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(request, response);
-                break;
-            case AGENT:
-                UserDetails agentDetails = agentService.getAgentById(jwtTokenUtil.getUsernameFromToken(tokenStr));
-
-                authentication = new UsernamePasswordAuthenticationToken(
-                        agentDetails, null,
-                        agentDetails == null ?
-                                List.of() : agentDetails.getAuthorities()
-                );
-
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(request, response);
-                break;
-            case OWNER:
-                UserDetails ownerDetails = ownerService.getOwnerById(jwtTokenUtil.getUsernameFromToken(tokenStr));
-
-                authentication = new UsernamePasswordAuthenticationToken(
-                        ownerDetails, null,
-                        ownerDetails == null ?
-                                List.of() : ownerDetails.getAuthorities()
-                );
-
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(request, response);
-                break;
-        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        filterChain.doFilter(request, response);
     }
 }

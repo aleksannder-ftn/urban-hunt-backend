@@ -1,11 +1,9 @@
 package com.ftn.sss.urbanhunt.security;
 
-import com.ftn.sss.urbanhunt.model.Agent;
+
 import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.Role;
-import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
-import com.ftn.sss.urbanhunt.service.interfaces.GuestService;
-import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
+import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -34,22 +32,19 @@ public class TokenUtils {
 
     private static final String AUDIENCE_WEB = "web";
 
-    @Autowired
-    private GuestService guestService;
+    private final UserService userService;
 
     @Autowired
-    private AgentService agentService;
+    public TokenUtils(UserService userService) {
+        this.userService = userService;
+    }
 
-    @Autowired
-    private OwnerService ownerService;
+    private final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
-
-    public String generateToken(Long id, Role role) {
+    public String generateToken(Long id) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(id.toString())
-                .claim("role", role)
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
@@ -80,8 +75,6 @@ public class TokenUtils {
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             userId = Long.parseLong(claims.getSubject());
-        } catch (ExpiredJwtException ex) {
-            userId = null;
         } catch (Exception e) {
             userId = null;
         }
@@ -89,28 +82,12 @@ public class TokenUtils {
         return userId;
     }
 
-    public Role getRoleFromToken(String token) {
-        Role role;
-
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            role = Role.valueOf((String) claims.get("role"));
-        } catch (ExpiredJwtException ex) {
-            role = null;
-        } catch (Exception e) {
-            role = null;
-        }
-
-        return role;
-    }
     public Date getIssuedAtDateFromToken(String token) {
         Date issueAt;
 
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             issueAt = claims.getIssuedAt();
-        } catch (ExpiredJwtException ex) {
-            issueAt = null;
         } catch (Exception e) {
             issueAt = null;
         }
@@ -124,8 +101,6 @@ public class TokenUtils {
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             audience = claims.getAudience();
-        } catch (ExpiredJwtException ex) {
-            audience = null;
         } catch (Exception e) {
             audience = null;
         }
@@ -154,8 +129,6 @@ public class TokenUtils {
                     .setSigningKey(SECRET)
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (ExpiredJwtException ex) {
-            claims = null;
         } catch (Exception e) {
             claims = null;
         }
@@ -164,11 +137,10 @@ public class TokenUtils {
     }
 
     public Boolean validateToken(String token, User userDetails) {
-        User user = userDetails;
         final Long userId = getUsernameFromToken(token);
 
         return (userId != null
-                && userId.equals(user.getId()));
+                && userId.equals(userDetails.getId()));
     }
 
     public int getExpiredIn() { return EXPIRES_IN;}
@@ -179,20 +151,8 @@ public class TokenUtils {
 
     public boolean validate(String token) {
         Long userId = getUsernameFromToken(token);
-        Role userRole = getRoleFromToken(token);
 
-        switch (userRole) {
-            case GUEST:
-                return (userId != null && guestService.getGuestById(userId) != null);
-            case AGENT:
-                return (userId != null && agentService.getAgentById(userId) != null);
-            case OWNER:
-                return (userId != null && ownerService.getOwnerById(userId) != null);
-            case ADMINISTRATOR:
-                // sredi ovoo
-        }
-
-        return false;
+        return (userId != null && userService.getUserById(userId) != null);
     }
 }
 

@@ -2,6 +2,11 @@ package com.ftn.sss.urbanhunt.security;
 
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,16 +29,19 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
+    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtTokenFilter jwtTokenFilter) {
+    @Autowired
+    public SecurityConfig(JwtTokenFilter jwtTokenFilter, UserDetailsService uds) {
         this.jwtTokenFilter = jwtTokenFilter;
+        this.userDetailsService = uds;
     }
 
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer :: disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/agent/**").hasRole("AGENT")
                         .requestMatchers("/api/owner/**").hasRole("OWNER")
                         .requestMatchers("/api/guest/**").hasRole("GUEST")

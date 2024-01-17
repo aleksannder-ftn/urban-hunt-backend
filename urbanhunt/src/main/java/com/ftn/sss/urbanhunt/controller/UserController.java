@@ -1,16 +1,12 @@
 package com.ftn.sss.urbanhunt.controller;
 
-import com.ftn.sss.urbanhunt.dto.mapper.AgentMapper;
-import com.ftn.sss.urbanhunt.dto.mapper.GuestMapper;
-import com.ftn.sss.urbanhunt.dto.mapper.OwnerMapper;
+import com.ftn.sss.urbanhunt.dto.mapper.UserMapper;
 import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
-import com.ftn.sss.urbanhunt.model.Agent;
-import com.ftn.sss.urbanhunt.model.Guest;
-import com.ftn.sss.urbanhunt.model.Owner;
+import com.ftn.sss.urbanhunt.dto.user.UserTokenState;
+import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.Role;
-import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
-import com.ftn.sss.urbanhunt.service.interfaces.GuestService;
-import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
+import com.ftn.sss.urbanhunt.security.TokenUtils;
+import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,84 +15,94 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
 public class UserController {
-    private final GuestService guestService;
-    private final OwnerService ownerService;
-    private final AgentService agentService;
+
+    private final UserService userService;
+    private final TokenUtils tokenUtils;
+
 
     @Autowired
-    public UserController(GuestService guestService, OwnerService ownerService, AgentService agentService) {
-        this.guestService = guestService;
-        this.ownerService = ownerService;
-        this.agentService = agentService;
+    public UserController(UserService userService, TokenUtils tokenUtils) {
+        this.userService = userService;
+        this.tokenUtils = tokenUtils;
     }
 
     @GetMapping("/findAllUsers")
     public ResponseEntity<List<UserBasicDTO>> findAllUsers() {
-        List<Guest> guests = guestService.getAllGuests();
-        List<Owner> owners = ownerService.getAllOwners();
-        List<Agent> agents = agentService.getAllAgents();
+        List<User> allUsers = userService.getAllUsers();
 
-        List<UserBasicDTO> usersBasicDTO = Stream.concat(
-                guests.stream().map(GuestMapper::toGuestBasicDTO),
-                Stream.concat(
-                        owners.stream().map(OwnerMapper::toOwnerBasicDTO),
-                        agents.stream().map(AgentMapper::toAgentBasicDTO)
-                )
-        ).toList();
+        List<UserBasicDTO> usersBasicDTO = allUsers.stream()
+                .map(UserMapper:: toUserBasicDTO)
+                .toList();
 
         return new ResponseEntity<>(usersBasicDTO, HttpStatus.OK);
     }
 
     @PostMapping(value="/deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deactivateUser(@RequestBody Map<String, Object> payload) {
-        Role userRole = Role.valueOf((String) payload.get("role"));
-        Integer id = (Integer) payload.get("id");
-        Long userId = Long.valueOf(id);
+        User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
 
-        switch (userRole) {
-            case GUEST:
-                Guest guest = guestService.getGuestById(userId);
-                guestService.deactivateGuest(guest);
-                return new ResponseEntity<>("Guest deactivated", HttpStatus.OK);
-            case OWNER:
-                Owner owner = ownerService.getOwnerById(userId);
-                ownerService.deactivateOwner(owner);
-                return new ResponseEntity<>("Owner deactivated", HttpStatus.OK);
-            case AGENT:
-                Agent agent = agentService.getAgentById(userId);
-                agentService.deactivateAgent(agent);
-                return new ResponseEntity<>("Agent deactivated", HttpStatus.OK);
-            default:
-                return new ResponseEntity<>("Invalid role", HttpStatus.BAD_REQUEST);
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
         }
+
+        boolean success = userService.deactivateUser(user.getId()) == 1;
+
+        if (success) {
+            return new ResponseEntity<>("User deactivated", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not deactivated", HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PostMapping(value="/activateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> activateUser(@RequestBody Map<String, Object> payload) {
-        Role userRole = Role.valueOf((String) payload.get("role"));
-        Integer id = (Integer) payload.get("id");
-        Long userId = Long.valueOf(id);
+        User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
 
-        switch (userRole) {
-            case GUEST:
-                Guest guest = guestService.getGuestById(userId);
-                guestService.activateGuest(guest);
-                return new ResponseEntity<>("Guest activated", HttpStatus.OK);
-            case OWNER:
-                Owner owner = ownerService.getOwnerById(userId);
-                ownerService.activateOwner(owner);
-                return new ResponseEntity<>("Owner activated", HttpStatus.OK);
-            case AGENT:
-                Agent agent = agentService.getAgentById(userId);
-                agentService.activateAgent(agent);
-                return new ResponseEntity<>("Agent activated", HttpStatus.OK);
-            default:
-                return new ResponseEntity<>("Invalid role", HttpStatus.BAD_REQUEST);
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
         }
+
+        boolean success = userService.activateUser(user.getId()) == 1;
+
+        if (success) {
+            return new ResponseEntity<>("User activated", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not activated", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value="/auth/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserBasicDTO> registerUser(@RequestBody UserBasicDTO userBasicDTO) {
+        try {
+            User user = UserMapper.toUserEntity(userBasicDTO);
+            User newUser = userService.registerUser(UserMapper.toUserBasicDTO(user));
+            return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toUserBasicDTO(newUser));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @PostMapping(value="/auth/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserTokenState> loginUser(@RequestBody Map<String, Object> payload) {
+        String jwt = "";
+        Optional<User> user = userService.findUserByUsername(payload.get("username").toString());
+        String password = payload.get("password").toString();
+        if (user.isPresent()) {
+            if (password.matches(user.get().getPassword())) { // No password encoding for now. Password is stored as raw string.
+                jwt = tokenUtils.generateToken(user.get().getId());
+                long expiresIn = tokenUtils.getExpiredIn();
+                Role role = (Role) user.get().getAuthorities().stream().findFirst().orElse(null);
+                return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(new UserTokenState(jwt, 18000), HttpStatus.OK);
     }
 }
