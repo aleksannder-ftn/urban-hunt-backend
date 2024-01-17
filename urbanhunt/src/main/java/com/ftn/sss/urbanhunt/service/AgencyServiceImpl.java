@@ -26,4 +26,9 @@ public class AgencyServiceImpl implements AgencyService {
         }
 
     }
+
+    @Override
+    public Agency findAgencyByOwnerId(Long ownerId) {
+        return agencyRepository.findAgencyByOwnerId(ownerId);
+    }
 }

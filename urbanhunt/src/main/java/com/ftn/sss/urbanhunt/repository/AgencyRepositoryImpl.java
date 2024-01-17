@@ -15,4 +15,9 @@ public class AgencyRepositoryImpl implements AgencyRepository {
         entityManager.persist(agency);
         return agency;
     }
+
+    @Override
+    public Agency findAgencyByOwnerId(Long ownerId) {
+        return entityManager.find(Agency.class, ownerId);
+    }
 }
