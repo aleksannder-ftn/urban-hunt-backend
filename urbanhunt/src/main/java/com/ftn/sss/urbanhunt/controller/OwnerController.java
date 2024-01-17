@@ -45,19 +45,22 @@ public class OwnerController {
         }
     }
 
-    @GetMapping(value="/findAgencyByOwnerId", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/findAgencyByOwnerId", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<AgencyDetailedDTO> findAgencyByOwnerId(HttpServletRequest request) {
         try {
             Long id = (Long) request.getAttribute("userId");
             Agency agency = agencyService.findAgencyByOwnerId(id);
+            if (agency == null) {
+                return ResponseEntity.ok(AgencyMapper.toAgencyDetailedDTO(new Agency()));
+            }
             return ResponseEntity.ok(AgencyMapper.toAgencyDetailedDTO(agency));
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping(value="findOwnerById", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="findOwnerById", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<UserBasicDTO> findOwnerByUsername(HttpServletRequest request) {
         try {

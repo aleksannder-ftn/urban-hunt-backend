@@ -18,6 +18,10 @@ public class AgencyRepositoryImpl implements AgencyRepository {
 
     @Override
     public Agency findAgencyByOwnerId(Long ownerId) {
-        return entityManager.find(Agency.class, ownerId);
+        try {
+            return entityManager.find(Agency.class, ownerId);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
