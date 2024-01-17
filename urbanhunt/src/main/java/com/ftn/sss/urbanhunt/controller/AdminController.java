@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +29,8 @@ public class AdminController {
         this.userController = userController;
     }
 
-    @GetMapping(value="/findAllUsers")
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    @GetMapping(value="findAllUsers")
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     public ResponseEntity<List<UserBasicDTO>> findAllUsers() {
         List<User> allUsers = userService.getAllUsers();
 
@@ -40,8 +41,8 @@ public class AdminController {
         return new ResponseEntity<>(usersBasicDTO, HttpStatus.OK);
     }
 
-    @PostMapping(value="/deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    @PostMapping(value="deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     public ResponseEntity<String> deactivateUser(@RequestBody Map<String, Object> payload) {
         User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
 
@@ -59,8 +60,8 @@ public class AdminController {
 
     }
 
-    @PostMapping(value="/activateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    @PostMapping(value="activateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     public ResponseEntity<String> activateUser(@RequestBody Map<String, Object> payload) {
         User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
 
@@ -77,8 +78,8 @@ public class AdminController {
         }
     }
 
-    @PostMapping(value="/createNewOwner", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    @PostMapping(value="createNewOwner", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     public ResponseEntity<UserBasicDTO> createNewOwner(@RequestBody UserBasicDTO userBasicDTO) {
         try {
             return userController.registerUser(userBasicDTO);
@@ -88,8 +89,8 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/findAllGuests")
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    @GetMapping("findAllGuests")
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     public ResponseEntity<List<UserBasicDTO>> getAllGuests() {
         List<User> users = userService.getAllUsers();
 

@@ -50,6 +50,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String tokenStr = jwtTokenUtil.getToken(request);
         UserDetails userDetails = userService.getUserById(jwtTokenUtil.getUsernameFromToken(tokenStr));
 
+        System.out.println("User details: " + userDetails.getAuthorities());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null,
                 userDetails == null ?
