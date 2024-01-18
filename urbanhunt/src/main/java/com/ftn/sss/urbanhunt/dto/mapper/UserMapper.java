@@ -23,6 +23,7 @@ public class UserMapper {
         dto.setAddress(user.getAddress());
         dto.setActive(user.isActive());
         dto.setRole(user.getRole());
+        dto.setAgentAgencyId(user instanceof Agent ? ((Agent) user).getAgency().getId() : null);
         return dto;
     }
 
@@ -49,7 +50,6 @@ public class UserMapper {
         user.setAddress(dto.getAddress());
         user.setActive(dto.isActive());
         user.setRole(dto.getRole());
-
         return user;
     }
 }

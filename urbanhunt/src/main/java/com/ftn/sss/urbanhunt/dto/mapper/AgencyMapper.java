@@ -3,9 +3,11 @@ package com.ftn.sss.urbanhunt.dto.mapper;
 import com.ftn.sss.urbanhunt.dto.agency.AgencyBasicDTO;
 import com.ftn.sss.urbanhunt.dto.agency.AgencyDetailedDTO;
 import com.ftn.sss.urbanhunt.model.Agency;
+import com.ftn.sss.urbanhunt.model.Owner;
 import com.ftn.sss.urbanhunt.model.RealEstate;
 import com.ftn.sss.urbanhunt.model.Tour;
 import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
+import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 
 import java.util.stream.Collectors;
 
@@ -74,15 +76,15 @@ public class AgencyMapper {
         return agency;
     }
 /*
-    static Agency getAgencyEntityDetailed(AgencyDetailedDTO agencyDetailedDTO, Agency agency) {
+    static Agency getAgencyEntityDetailed(AgencyDetailedDTO agencyDetailedDTO, Agency agency, UserService userService) {
         agency.setId(agencyDetailedDTO.getId());
         agency.setName(agencyDetailedDTO.getName());
-        agency.setOwner(agencyDetailedDTO.getOwnerId());
+        agency.setOwner((Owner) userService.findUserById(agencyDetailedDTO.getOwnerId()));
         agency.setRealEstates(agencyDetailedDTO.getRealEstates());
         agency.setTours(agencyDetailedDTO.getTours());
         agency.setReport(agencyDetailedDTO.getReport());
 
         return agency;
-    } */
-
+    }
+*/
 }
