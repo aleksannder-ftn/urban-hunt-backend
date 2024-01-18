@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface AgencyRepository extends JpaRepository<Agency, Long> {
     Agency save(Agency agency);
     Agency findAgencyByOwnerId(Long ownerId);
+    Agency findAgencyById(Long id);
     Optional<Agency> findById(Long id);
 }
