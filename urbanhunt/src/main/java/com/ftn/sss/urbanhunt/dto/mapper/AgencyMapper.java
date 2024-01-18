@@ -3,6 +3,11 @@ package com.ftn.sss.urbanhunt.dto.mapper;
 import com.ftn.sss.urbanhunt.dto.agency.AgencyBasicDTO;
 import com.ftn.sss.urbanhunt.dto.agency.AgencyDetailedDTO;
 import com.ftn.sss.urbanhunt.model.Agency;
+import com.ftn.sss.urbanhunt.model.RealEstate;
+import com.ftn.sss.urbanhunt.model.Tour;
+import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
+
+import java.util.stream.Collectors;
 
 public class AgencyMapper {
 
@@ -23,7 +28,7 @@ public class AgencyMapper {
     static AgencyBasicDTO getAgencyBasicDTO(Agency agency, AgencyBasicDTO agencyBasicDTO) {
         agencyBasicDTO.setId(agency.getId());
         agencyBasicDTO.setName(agency.getName());
-        agencyBasicDTO.setOwner(agency.getOwner());
+        agencyBasicDTO.setOwnerId(agency.getOwner().getId());
 
         return agencyBasicDTO;
     }
@@ -31,45 +36,53 @@ public class AgencyMapper {
     static AgencyDetailedDTO getAgencyDetailedDTO(Agency agency, AgencyDetailedDTO agencyDetailedDTO) {
         agencyDetailedDTO.setId(agency.getId());
         agencyDetailedDTO.setName(agency.getName());
-        agencyDetailedDTO.setOwner(agency.getOwner());
-        agencyDetailedDTO.setRealEstates(agency.getRealEstates());
-        agencyDetailedDTO.setTours(agency.getTours());
+        agencyDetailedDTO.setOwnerId(agency.getOwner().getId());
+
+        agencyDetailedDTO.setRealEstatesIds(
+                agency.getRealEstates().stream().map(RealEstate::getId).collect(Collectors.toList())
+        );
+
+        agencyDetailedDTO.setToursIds(
+                agency.getTours().stream().map(Tour::getId).collect(Collectors.toList())
+        );
+
         agencyDetailedDTO.setReport(agency.getReport());
 
         return agencyDetailedDTO;
     }
-    public static Agency toAgencyEntity(AgencyBasicDTO agencyBasicDTO) {
+
+    public static Agency toAgencyEntity(AgencyBasicDTO agencyBasicDTO, OwnerService ownerService) {
         if (agencyBasicDTO == null) return null;
 
         Agency agency = new Agency();
-        return getAgencyEntity(agencyBasicDTO, agency);
+        return getAgencyEntity(agencyBasicDTO, agency, ownerService);
     }
-
+/*
     public static Agency toAgencyEntity(AgencyDetailedDTO agencyDetailedDTO) {
         if (agencyDetailedDTO == null) return null;
 
         Agency agency = new Agency();
         return getAgencyEntityDetailed(agencyDetailedDTO, agency);
-    }
+    } */
 
 
-    static Agency getAgencyEntity(AgencyBasicDTO agencyBasicDTO, Agency agency) {
+    static Agency getAgencyEntity(AgencyBasicDTO agencyBasicDTO, Agency agency, OwnerService ownerService) {
         agency.setId(agencyBasicDTO.getId());
         agency.setName(agencyBasicDTO.getName());
-        agency.setOwner(agencyBasicDTO.getOwner());
+        agency.setOwner(ownerService.findOwnerById(agencyBasicDTO.getOwnerId()));
 
         return agency;
     }
-
+/*
     static Agency getAgencyEntityDetailed(AgencyDetailedDTO agencyDetailedDTO, Agency agency) {
         agency.setId(agencyDetailedDTO.getId());
         agency.setName(agencyDetailedDTO.getName());
-        agency.setOwner(agencyDetailedDTO.getOwner());
+        agency.setOwner(agencyDetailedDTO.getOwnerId());
         agency.setRealEstates(agencyDetailedDTO.getRealEstates());
         agency.setTours(agencyDetailedDTO.getTours());
         agency.setReport(agencyDetailedDTO.getReport());
 
         return agency;
-    }
+    } */
 
 }

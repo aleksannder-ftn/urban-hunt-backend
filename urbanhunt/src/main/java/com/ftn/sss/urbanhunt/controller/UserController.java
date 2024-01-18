@@ -1,11 +1,15 @@
 package com.ftn.sss.urbanhunt.controller;
 
+import com.ftn.sss.urbanhunt.dto.agency.AgencyBasicDTO;
+import com.ftn.sss.urbanhunt.dto.mapper.AgencyMapper;
 import com.ftn.sss.urbanhunt.dto.mapper.UserMapper;
 import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
 import com.ftn.sss.urbanhunt.dto.user.UserTokenState;
+import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.security.TokenUtils;
+import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +28,13 @@ public class UserController {
 
     private final UserService userService;
     private final TokenUtils tokenUtils;
+    private final AgencyService agencyService;
 
 
     @Autowired
-    public UserController(UserService userService, TokenUtils tokenUtils) {
+    public UserController(UserService userService,AgencyService agencyService, TokenUtils tokenUtils) {
         this.userService = userService;
+        this.agencyService = agencyService;
         this.tokenUtils = tokenUtils;
     }
 
@@ -80,7 +86,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @PostMapping(value="/auth/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserTokenState> loginUser(@RequestBody Map<String, Object> payload) {

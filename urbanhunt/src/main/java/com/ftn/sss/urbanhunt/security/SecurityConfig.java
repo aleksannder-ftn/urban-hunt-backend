@@ -40,13 +40,14 @@ public class SecurityConfig {
         this.userDetailsService = uds;
     }
 
+
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer :: disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/agent/**").hasAuthority("AGENT")
-                        .requestMatchers("/owner/**").hasAuthority("OWNER")
+                        .requestMatchers("/owner/**").permitAll()
                         .requestMatchers("/guest/**").hasAuthority("GUEST")
                         .requestMatchers("/admin/**").hasAuthority("ADMINISTRATOR")
                         .anyRequest().authenticated())

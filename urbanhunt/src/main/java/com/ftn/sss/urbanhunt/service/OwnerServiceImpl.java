@@ -15,11 +15,13 @@ import java.util.List;
 public class OwnerServiceImpl implements OwnerService {
     private final OwnerRepository ownerRepository;
 
-    private final AgencyService agencyService;
-
     @Autowired
     public OwnerServiceImpl(OwnerRepository ownerRepository, AgencyService agencyService) {
         this.ownerRepository = ownerRepository;
-        this.agencyService = agencyService;
 }
+
+    @Override
+    public Owner findOwnerById(Long id) {
+        return ownerRepository.findOwnerById(id);
+    }
 }

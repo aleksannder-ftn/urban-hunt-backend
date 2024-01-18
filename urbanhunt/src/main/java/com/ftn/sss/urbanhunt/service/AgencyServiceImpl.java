@@ -1,6 +1,5 @@
 package com.ftn.sss.urbanhunt.service;
 
-
 import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.repository.interfaces.AgencyRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
@@ -20,11 +19,10 @@ public class AgencyServiceImpl implements AgencyService {
     @Override
     public Agency createAgency(Agency agency) {
         try {
-            return agencyRepository.createAgency(agency);
+            return agencyRepository.save(agency);
         } catch ( Exception e) {
             return null;
         }
-
     }
 
     @Override
