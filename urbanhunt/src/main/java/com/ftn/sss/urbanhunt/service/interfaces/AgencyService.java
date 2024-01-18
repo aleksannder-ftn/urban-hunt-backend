@@ -6,4 +6,5 @@ import com.ftn.sss.urbanhunt.model.Agency;
 public interface AgencyService {
     Agency createAgency(Agency agency);
     Agency findAgencyByOwnerId(Long ownerId);
+    Agency findAgencyById(Long id);
 }

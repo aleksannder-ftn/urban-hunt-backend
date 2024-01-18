@@ -18,14 +18,14 @@ import java.util.ArrayList;
 public class Agent extends  User{
 
     @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ArrayList<Tour> tours;
+    private ArrayList<Tour> tours = new ArrayList<>();
 
     @Column(name="average_rating", nullable = true)
     @JoinColumn(name = "average_rating")
     private float averageRating;
 
     @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ArrayList<RealEstate> realEstateList;
+    private ArrayList<RealEstate> realEstateList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="agency_id", nullable = false)

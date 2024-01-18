@@ -21,4 +21,7 @@ public class UserBasicDTO {
     private String address;
     private boolean active;
     private Role role;
+
+    // specifics for agent
+    private Long agentAgencyId;
 }

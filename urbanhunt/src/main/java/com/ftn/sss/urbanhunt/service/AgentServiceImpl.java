@@ -5,9 +5,8 @@ import com.ftn.sss.urbanhunt.repository.interfaces.AgentRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AgentServiceImpl implements AgentService {
@@ -18,4 +17,18 @@ public class AgentServiceImpl implements AgentService {
         this.agentRepository = agentRepository;
     }
 
+    @Override
+    public Agent saveAgent(Agent agent) {
+        return agentRepository.save(agent);
+    }
+
+    @Override
+    public Optional<Agent> findAgentById(Long id) {
+        return agentRepository.findById(id);
+    }
+
+    @Override
+    public void deleteAgent(Agent agent) {
+        agentRepository.delete(agent);
+    }
 }

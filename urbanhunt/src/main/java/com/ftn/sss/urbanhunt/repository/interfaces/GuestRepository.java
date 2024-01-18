@@ -5,6 +5,6 @@ import com.ftn.sss.urbanhunt.model.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-public interface GuestRepository extends JpaRepository<Owner, Long> {
+public interface GuestRepository extends JpaRepository<Guest, Long> {
 
 }
