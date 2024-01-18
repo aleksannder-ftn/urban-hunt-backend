@@ -2,10 +2,8 @@ package com.ftn.sss.urbanhunt.security;
 
 
 import com.ftn.sss.urbanhunt.model.User;
-import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -152,7 +150,7 @@ public class TokenUtils {
     public boolean validate(String token) {
         Long userId = getUsernameFromToken(token);
 
-        return (userId != null && userService.getUserById(userId) != null);
+        return (userId != null && userService.findUserById(userId) != null);
     }
 }
 

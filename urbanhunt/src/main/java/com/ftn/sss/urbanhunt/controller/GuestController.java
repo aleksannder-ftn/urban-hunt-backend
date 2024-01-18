@@ -9,6 +9,7 @@ import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,17 +27,5 @@ public class GuestController {
         this.userService = userService;
     }
 
-    @GetMapping("/findAllGuests")
-    public ResponseEntity<List<UserBasicDTO>> getAllGuests() {
-        List<User> users = userService.getAllUsers();
 
-        List<User> guests = users.stream()
-                .filter(user -> user.getRole() == Role.GUEST)
-                .toList();
-
-        List<UserBasicDTO> guestsBasicDTO = guests.stream()
-                .map(UserMapper:: toUserBasicDTO)
-                .toList();
-        return new ResponseEntity<>(guestsBasicDTO, HttpStatus.OK);
-    }
 }

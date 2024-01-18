@@ -18,40 +18,4 @@ public class AgentServiceImpl implements AgentService {
         this.agentRepository = agentRepository;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Agent> getAllAgents() {
-        try {
-            return agentRepository.getAllAgents();
-        } catch (Exception e) {
-            throw null;
-        }
-    }
-
-    @Override
-    public Agent getAgentById(Long id) {
-        try {
-            return agentRepository.getAgentById(id);
-        } catch (Exception e) {
-            throw null;
-        }
-    }
-
-    @Override
-    public int deactivateAgent(Agent agent) {
-        try {
-            return agentRepository.deactivateAgent(agent);
-        } catch (Exception e) {
-            throw null;
-        }
-    }
-
-    @Override
-    public int activateAgent(Agent agent) {
-        try {
-            return agentRepository.activateAgent(agent);
-        } catch (Exception e) {
-            throw null;
-        }
-    }
 }

@@ -1,10 +1,5 @@
 package com.ftn.sss.urbanhunt.security;
 
-import com.ftn.sss.urbanhunt.model.User;
-import com.ftn.sss.urbanhunt.model.enums.Role;
-import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
-import com.ftn.sss.urbanhunt.service.interfaces.GuestService;
-import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -53,7 +48,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         String tokenStr = jwtTokenUtil.getToken(request);
-        UserDetails userDetails = (UserDetails) userService.getUserById(jwtTokenUtil.getUsernameFromToken(tokenStr));
+
+        Long userId = (jwtTokenUtil.getUsernameFromToken(tokenStr));
+
+        request.setAttribute("userId", userId);
+        UserDetails userDetails = userService.findUserById(jwtTokenUtil.getUsernameFromToken(tokenStr));
+
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null,

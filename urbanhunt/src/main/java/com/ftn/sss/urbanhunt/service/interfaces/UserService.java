@@ -10,7 +10,7 @@ public interface UserService {
 
     List<User> getAllUsers();
     User registerUser(UserBasicDTO userBasicDTO);
-    User getUserById(Long id);
+    User findUserById(Long id);
     int deactivateUser(Long id);
     int activateUser(Long id);
 

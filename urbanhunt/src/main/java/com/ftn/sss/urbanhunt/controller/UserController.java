@@ -6,14 +6,15 @@ import com.ftn.sss.urbanhunt.dto.user.UserTokenState;
 import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.security.TokenUtils;
+import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,28 +24,20 @@ public class UserController {
 
     private final UserService userService;
     private final TokenUtils tokenUtils;
+    private final AgencyService agencyService;
 
 
     @Autowired
-    public UserController(UserService userService, TokenUtils tokenUtils) {
+    public UserController(UserService userService,AgencyService agencyService, TokenUtils tokenUtils) {
         this.userService = userService;
+        this.agencyService = agencyService;
         this.tokenUtils = tokenUtils;
     }
 
-    @GetMapping("/findAllUsers")
-    public ResponseEntity<List<UserBasicDTO>> findAllUsers() {
-        List<User> allUsers = userService.getAllUsers();
-
-        List<UserBasicDTO> usersBasicDTO = allUsers.stream()
-                .map(UserMapper:: toUserBasicDTO)
-                .toList();
-
-        return new ResponseEntity<>(usersBasicDTO, HttpStatus.OK);
-    }
-
     @PostMapping(value="/deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
     public ResponseEntity<String> deactivateUser(@RequestBody Map<String, Object> payload) {
-        User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
+        User user = userService.findUserById(Long.valueOf((Integer) payload.get("id")));
 
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
@@ -61,8 +54,9 @@ public class UserController {
     }
 
     @PostMapping(value="/activateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
     public ResponseEntity<String> activateUser(@RequestBody Map<String, Object> payload) {
-        User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
+        User user = userService.findUserById(Long.valueOf((Integer) payload.get("id")));
 
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
@@ -88,7 +82,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @PostMapping(value="/auth/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserTokenState> loginUser(@RequestBody Map<String, Object> payload) {

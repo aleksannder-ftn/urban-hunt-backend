@@ -1,15 +1,10 @@
 package com.ftn.sss.urbanhunt.repository.interfaces;
 
-import com.ftn.sss.urbanhunt.model.Agent;
+import com.ftn.sss.urbanhunt.model.Owner;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface AgentRepository {
-    List<Agent> getAllAgents();
+public interface AgentRepository extends JpaRepository<Owner, Long> {
 
-    Agent getAgentById(Long id);
-
-    int deactivateAgent(Agent agent);
-
-    int activateAgent(Agent agent);
 }

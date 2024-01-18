@@ -2,14 +2,8 @@ package com.ftn.sss.urbanhunt.repository.interfaces;
 
 import com.ftn.sss.urbanhunt.model.Owner;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OwnerRepository {
-    List<Owner> getAllOwners();
-
-    Owner getOwnerById(Long id);
-
-    int deactivateOwner(Owner owner);
-
-    int activateOwner(Owner owner);
+public interface OwnerRepository extends JpaRepository<Owner, Long> {
+    Owner findOwnerById(Long id);
 }
