@@ -17,6 +17,11 @@ public class AgencyServiceImpl implements AgencyService {
     }
 
     @Override
+    public Agency findAgencyById(Long id) {
+        return agencyRepository.findAgencyById(id);
+    }
+
+    @Override
     public Agency createAgency(Agency agency) {
         try {
             return agencyRepository.save(agency);
