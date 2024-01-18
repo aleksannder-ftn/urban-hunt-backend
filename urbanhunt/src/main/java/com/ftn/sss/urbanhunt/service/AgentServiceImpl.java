@@ -6,6 +6,7 @@ import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +31,10 @@ public class AgentServiceImpl implements AgentService {
     @Override
     public void deleteAgent(Agent agent) {
         agentRepository.delete(agent);
+    }
+
+    @Override
+    public List<Agent> findAllAgents() {
+        return agentRepository.findAll();
     }
 }

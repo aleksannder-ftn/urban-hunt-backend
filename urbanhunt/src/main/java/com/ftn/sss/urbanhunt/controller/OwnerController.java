@@ -21,8 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value="/owner")
@@ -52,7 +52,6 @@ public class OwnerController {
             Agency newAgency = agencyService.createAgency(agency);
             return ResponseEntity.ok(AgencyMapper.toAgencyBasicDTO(newAgency));
         } catch (Exception e) {
-            System.out.println(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -84,6 +83,21 @@ public class OwnerController {
         }
     }
 
+    @GetMapping(value="findAllAgents", produces= MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<List<AgentBasicDTO>> findAllAgents() {
+        try {
+            List<Agent> agents = agentService.findAllAgents();
+
+            List<AgentBasicDTO> dtoList = agents.stream()
+                    .map(AgentMapper::toAgentBasicDTO)
+                    .toList();
+            return ResponseEntity.ok(dtoList);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping(value="createAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<?> addAgent(@RequestBody AgentBasicDTO agentBasicDTO) {
@@ -104,7 +118,6 @@ public class OwnerController {
             agentService.deleteAgent(agent);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
