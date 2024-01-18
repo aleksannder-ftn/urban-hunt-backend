@@ -83,11 +83,11 @@ public class OwnerController {
         }
     }
 
-    @GetMapping(value="findAllAgents", produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="findAllAgentsByAgencyId", produces= MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('OWNER')")
-    public ResponseEntity<List<AgentBasicDTO>> findAllAgents() {
+    public ResponseEntity<List<AgentBasicDTO>> findAllAgentsByAgencyId(@RequestParam Long agencyId) {
         try {
-            List<Agent> agents = agentService.findAllAgents();
+            List<Agent> agents = agentService.findAllAgentsByAgencyId(agencyId);
 
             List<AgentBasicDTO> dtoList = agents.stream()
                     .map(AgentMapper::toAgentBasicDTO)
@@ -112,9 +112,9 @@ public class OwnerController {
 
     @PostMapping(value="deleteAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('OWNER')")
-    public ResponseEntity<?> deleteAgent(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<?> deleteAgent(@RequestParam Long agentId) {
         try {
-            Agent agent = agentService.findAgentById(Long.valueOf((Integer) payload.get("id"))).orElse(null);
+            Agent agent = agentService.findAgentById(agentId).orElse(null);
             agentService.deleteAgent(agent);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {

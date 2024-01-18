@@ -20,6 +20,7 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public Agent saveAgent(Agent agent) {
+        agent.setActive(true);
         return agentRepository.save(agent);
     }
 
@@ -36,5 +37,10 @@ public class AgentServiceImpl implements AgentService {
     @Override
     public List<Agent> findAllAgents() {
         return agentRepository.findAll();
+    }
+
+    @Override
+    public List<Agent> findAllAgentsByAgencyId(Long agencyId) {
+        return agentRepository.findAllAgentsByAgencyId(agencyId);
     }
 }

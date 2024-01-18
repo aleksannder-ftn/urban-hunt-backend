@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface AgentRepository extends JpaRepository<Agent, Long> {
 
+    List<Agent> findAllAgentsByAgencyId(Long agencyId);
+
 }

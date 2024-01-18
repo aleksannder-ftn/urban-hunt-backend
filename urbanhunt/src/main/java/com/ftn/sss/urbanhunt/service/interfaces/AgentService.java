@@ -14,4 +14,6 @@ public interface AgentService {
     void deleteAgent(Agent agent);
 
     List<Agent> findAllAgents();
+
+    List<Agent> findAllAgentsByAgencyId(Long agencyId);
 }
