@@ -1,11 +1,8 @@
 package com.ftn.sss.urbanhunt.controller;
 
-import com.ftn.sss.urbanhunt.dto.agency.AgencyBasicDTO;
-import com.ftn.sss.urbanhunt.dto.mapper.AgencyMapper;
 import com.ftn.sss.urbanhunt.dto.mapper.UserMapper;
 import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
 import com.ftn.sss.urbanhunt.dto.user.UserTokenState;
-import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.security.TokenUtils;
@@ -18,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -41,7 +37,7 @@ public class UserController {
     @PostMapping(value="/deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
     public ResponseEntity<String> deactivateUser(@RequestBody Map<String, Object> payload) {
-        User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
+        User user = userService.findUserById(Long.valueOf((Integer) payload.get("id")));
 
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
@@ -60,7 +56,7 @@ public class UserController {
     @PostMapping(value="/activateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
     public ResponseEntity<String> activateUser(@RequestBody Map<String, Object> payload) {
-        User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
+        User user = userService.findUserById(Long.valueOf((Integer) payload.get("id")));
 
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);

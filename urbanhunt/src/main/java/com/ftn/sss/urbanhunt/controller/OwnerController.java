@@ -1,7 +1,6 @@
 package com.ftn.sss.urbanhunt.controller;
 
 import com.ftn.sss.urbanhunt.dto.agency.AgencyBasicDTO;
-import com.ftn.sss.urbanhunt.dto.agency.AgencyDetailedDTO;
 import com.ftn.sss.urbanhunt.dto.mapper.AgencyMapper;
 import com.ftn.sss.urbanhunt.dto.mapper.UserMapper;
 import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
@@ -39,7 +38,7 @@ public class OwnerController {
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<AgencyBasicDTO> createAgency(@RequestBody AgencyBasicDTO agencyBasicDTO) {
         try {
-            Owner owner = ownerService.findOwnerById(agencyBasicDTO.getOwnerId());
+            Owner owner = (Owner) userService.findUserById(agencyBasicDTO.getOwnerId());
             Agency agency = AgencyMapper.toAgencyEntity(agencyBasicDTO, ownerService);
             agency.setOwner(owner);
             Agency newAgency = agencyService.createAgency(agency);
@@ -70,7 +69,7 @@ public class OwnerController {
     public ResponseEntity<UserBasicDTO> findOwnerByUsername(HttpServletRequest request) {
         try {
             Long id = (Long) request.getAttribute("userId");
-            Owner owner = ownerService.findOwnerById(id);
+            Owner owner = (Owner) userService.findUserById(id);
             return ResponseEntity.ok(UserMapper.toUserBasicDTO(owner));
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +43,7 @@ public class AdminController {
     @PostMapping(value="deactivateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     public ResponseEntity<String> deactivateUser(@RequestBody Map<String, Object> payload) {
-        User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
+        User user = userService.findUserById(Long.valueOf((Integer) payload.get("id")));
 
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
@@ -63,7 +62,7 @@ public class AdminController {
     @PostMapping(value="activateUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     public ResponseEntity<String> activateUser(@RequestBody Map<String, Object> payload) {
-        User user = userService.getUserById(Long.valueOf((Integer) payload.get("id")));
+        User user = userService.findUserById(Long.valueOf((Integer) payload.get("id")));
 
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
