@@ -36,7 +36,7 @@ public class AgencyServiceImpl implements AgencyService {
     }
 
     @Override
-    public Agency findAgencyById(Long id) {
-        return agencyRepository.findById(id).orElse(null);
+    public Agency findAgencyByAgentId(Long ownerId) {
+        return agencyRepository.findAgencyByAgentId(ownerId);
     }
 }

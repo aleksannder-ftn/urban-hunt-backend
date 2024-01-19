@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
             case GUEST ->  new Guest();
             case ADMINISTRATOR -> new Administrator();
             case OWNER -> new Owner();
+            case AGENT -> new Agent();
             default -> throw new IllegalStateException("Unexpected value: " + role);
         };
 

@@ -5,6 +5,7 @@ import com.ftn.sss.urbanhunt.model.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,13 +33,13 @@ public class RealEstate {
     private float price;
 
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Image> image;
+    private List<Image> image = new ArrayList<>();
 
     @Column(name="view_count")
-    private int viewCount;
+    private Integer viewCount;
 
     @Column(name="rating")
-    private float rating;
+    private Float rating;
 
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Tour> tours;

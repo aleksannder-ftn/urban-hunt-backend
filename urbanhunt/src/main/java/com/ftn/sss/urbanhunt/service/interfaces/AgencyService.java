@@ -6,5 +6,5 @@ public interface AgencyService {
     Agency findAgencyById(Long id);
     Agency createAgency(Agency agency);
     Agency findAgencyByOwnerId(Long ownerId);
-    Agency findAgencyById(Long id);
+    Agency findAgencyByAgentId(Long ownerId);
 }

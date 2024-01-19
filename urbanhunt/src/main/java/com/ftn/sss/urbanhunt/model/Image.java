@@ -24,4 +24,5 @@ public class Image {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="real_estate_id", nullable = false)
     private RealEstate realEstate;
+
 }

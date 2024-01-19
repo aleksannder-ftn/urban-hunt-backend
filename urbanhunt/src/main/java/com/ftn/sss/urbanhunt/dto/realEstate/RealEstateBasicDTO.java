@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,6 +24,7 @@ public class RealEstateBasicDTO {
     private RealEstateType realEstateType;
     private Long agentId;
     private Long agencyId;
+    private List<String> images;
     // under are nullable
     private Float rating;
     private Float surfaceArea;

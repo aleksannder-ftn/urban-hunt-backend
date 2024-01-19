@@ -23,7 +23,7 @@ public class Agent extends  User{
 
     @Column(name="average_rating", nullable = true)
     @JoinColumn(name = "average_rating")
-    private float averageRating;
+    private Float averageRating;
 
     @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RealEstate> realEstateList;
