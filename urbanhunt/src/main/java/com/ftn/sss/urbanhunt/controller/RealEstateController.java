@@ -2,10 +2,8 @@ package com.ftn.sss.urbanhunt.controller;
 
 import com.ftn.sss.urbanhunt.dto.mapper.RealEstateMapper;
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
-import com.ftn.sss.urbanhunt.model.Agency;
-import com.ftn.sss.urbanhunt.model.Agent;
-import com.ftn.sss.urbanhunt.model.Image;
-import com.ftn.sss.urbanhunt.model.RealEstate;
+import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
+import com.ftn.sss.urbanhunt.model.*;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
 import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
@@ -16,9 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.print.attribute.standard.Media;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class RealEstateController {
@@ -34,6 +34,30 @@ public class RealEstateController {
         this.agencyService = agencyService;
         this.imageService = imageService;
         this.realEstateService = realEstateService;
+    }
+
+    @GetMapping(value="/findAllRealEstates", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RealEstateBasicDTO>> findAllRealEstates(HttpServletRequest request) {
+        try {
+            List<RealEstate> realEstates = new ArrayList<>();
+            List<RealEstateBasicDTO> dto = new ArrayList<>();
+            if(request.getAttribute("userId").equals("default")) {
+                realEstates = realEstateService.findAll();
+                return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, dto));
+            }
+            Long id = (Long) request.getAttribute("userId");
+            User user = userService.findUserById(id);
+
+            if(user.getRole().equals("AGENT")) {
+                realEstates = realEstateService.findAllByAgentId(id);
+            } else {
+                realEstates = realEstateService.findAll();
+            }
+            return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, dto));
+        } catch(Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping(value="/agent/createRealEstate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

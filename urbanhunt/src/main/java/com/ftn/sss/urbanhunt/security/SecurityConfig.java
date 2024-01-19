@@ -46,8 +46,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer :: disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/findAllRealEstates").permitAll()
                         .requestMatchers("/agent/**").hasAuthority("AGENT")
-                        .requestMatchers("/owner/**").permitAll()
+                        .requestMatchers("/owner/**").hasAuthority("OWNER")
                         .requestMatchers("/guest/**").hasAuthority("GUEST")
                         .requestMatchers("/admin/**").hasAuthority("ADMINISTRATOR")
                         .anyRequest().authenticated())

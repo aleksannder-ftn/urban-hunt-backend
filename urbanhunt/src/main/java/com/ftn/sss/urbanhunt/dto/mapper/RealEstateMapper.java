@@ -40,6 +40,15 @@ public class RealEstateMapper {
         return realEstateBasicDTO;
     }
 
+    public static List<RealEstateBasicDTO> toRealEstateListDTO(List<RealEstate> realEstates, List<RealEstateBasicDTO> dto) {
+        for(RealEstate r : realEstates) {
+            RealEstateBasicDTO basic = new RealEstateBasicDTO();
+            dto.add(RealEstateMapper.getRealEstateBasicDTO(r, basic));
+        }
+
+        return dto;
+    }
+
     public static RealEstate toRealEstateEntity(RealEstateBasicDTO realEstateBasicDTO, UserService userService, AgencyService agencyService, ImageService imageService) {
         if (realEstateBasicDTO == null) return null;
 

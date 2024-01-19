@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RealEstateService {
+    List<RealEstate> findAll();
+    List<RealEstate> findAllByAgentId(Long id);
     Optional<RealEstate> findById(Long id);
     RealEstate findRealEstateById(Long id);
     Optional<RealEstate> save(RealEstate realEstate);

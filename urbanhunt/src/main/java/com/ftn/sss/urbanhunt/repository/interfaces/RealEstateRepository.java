@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {
     RealEstate findRealEstateById(Long id);
+    List<RealEstate> findAllByAgentId(Long id);
 }

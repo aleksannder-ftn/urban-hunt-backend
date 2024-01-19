@@ -29,6 +29,16 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
+    public List<RealEstate> findAll() {
+        return realEstateRepository.findAll();
+    }
+
+    @Override
+    public List<RealEstate> findAllByAgentId(Long id) {
+        return realEstateRepository.findAllByAgentId(id);
+    }
+
+    @Override
     public Optional<RealEstate> findById(Long id) {
         return realEstateRepository.findById(id);
     }
