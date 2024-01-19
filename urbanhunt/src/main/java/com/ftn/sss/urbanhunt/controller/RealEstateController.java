@@ -2,21 +2,21 @@ package com.ftn.sss.urbanhunt.controller;
 
 import com.ftn.sss.urbanhunt.dto.mapper.RealEstateMapper;
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
-import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
 import com.ftn.sss.urbanhunt.model.*;
+import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
 import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class RealEstateController {
     @GetMapping(value="/findAllRealEstates", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RealEstateBasicDTO>> findAllRealEstates(HttpServletRequest request) {
         try {
-            List<RealEstate> realEstates = new ArrayList<>();
+            List<RealEstate> realEstates;
             List<RealEstateBasicDTO> dto = new ArrayList<>();
             if(request.getAttribute("userId").equals("default")) {
                 realEstates = realEstateService.findAll();
@@ -48,7 +48,7 @@ public class RealEstateController {
             Long id = (Long) request.getAttribute("userId");
             User user = userService.findUserById(id);
 
-            if(user.getRole().equals("AGENT")) {
+            if(user.getRole().equals(Role.AGENT)) {
                 realEstates = realEstateService.findAllByAgentId(id);
             } else {
                 realEstates = realEstateService.findAll();
@@ -68,9 +68,39 @@ public class RealEstateController {
             realEstateBasicDTO.setAgentId(id);
             RealEstate newRealEstate = realEstateService.addRealEstateWithImages(realEstateBasicDTO, userService, agencyService, imageService);
             return ResponseEntity.ok(RealEstateMapper.getRealEstateBasicDTO(newRealEstate, realEstateBasicDTO));
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(value="deactivate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('OWNER', 'AGENT', 'ADMINISTRATOR')")
+    public ResponseEntity<?> deactivateRealEstate(@RequestParam Long id) {
+        try {
+            boolean success = realEstateService.deactivateRealEstate(id) == 1;
+            if(success) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value="activate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('OWNER', 'AGENT', 'ADMINISTRATOR')")
+    public ResponseEntity<?> activateRealEstate(@RequestParam Long id) {
+        try {
+            boolean success = realEstateService.activateRealEstate(id) == 1;
+            if(success) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 }

@@ -5,7 +5,6 @@ import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.Image;
 import com.ftn.sss.urbanhunt.model.RealEstate;
-import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.repository.interfaces.RealEstateRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
@@ -76,4 +75,31 @@ public class RealEstateServiceImpl implements RealEstateService {
             }
         }
         return realEstate;
-    }}
+    }
+
+    @Override
+    public int activateRealEstate(Long id) {
+        RealEstate realEstate = realEstateRepository.findRealEstateById(id);
+        if (realEstate == null) {
+            return 0;
+        } else if (realEstate.isActive()) {
+            return 0;
+        }
+        realEstate.setActive(true);
+        realEstateRepository.save(realEstate);
+        return 1;
+    }
+
+    @Override
+    public int deactivateRealEstate(Long id) {
+        RealEstate realEstate = realEstateRepository.findRealEstateById(id);
+        if (realEstate == null) {
+            return 0;
+        } else if (!realEstate.isActive()) {
+            return 0;
+        }
+        realEstate.setActive(false);
+        realEstateRepository.save(realEstate);
+        return 1;
+    }
+}
