@@ -20,6 +20,8 @@ public class TourServiceImpl implements TourService {
     }
     @Override
     public Tour save(Tour tour) {
+        tour.setAgent(tour.getRealEstate().getAgent());
+        tour.setAgency(tour.getRealEstate().getAgency());
         return tourRepository.save(tour);
     }
 
@@ -47,7 +49,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public void updateTourStatus() {
+    public void updateTourFinished() {
         List<Tour> getAcceptedTours = tourRepository.getAllByAcceptedAndFinished(true, false);
         for (Tour tour : getAcceptedTours) {
             if (tour.getEndTime().isBefore(LocalDateTime.now())) {

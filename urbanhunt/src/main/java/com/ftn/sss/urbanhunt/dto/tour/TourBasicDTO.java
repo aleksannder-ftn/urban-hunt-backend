@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class TourBasicDTO {
     private Long id;
-    private LocalDateTime startTime;
+    private Long startTime;
     private boolean accepted;
     private boolean finished;
     private Long realEstateId;

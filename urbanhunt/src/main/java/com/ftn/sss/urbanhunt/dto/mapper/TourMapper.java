@@ -7,13 +7,16 @@ import com.ftn.sss.urbanhunt.model.Tour;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
+import com.ftn.sss.urbanhunt.util.TourScheduler;
+
+import java.time.LocalDateTime;
 
 public class TourMapper {
 
     public static TourBasicDTO toTourBasicDTO(Tour tour) {
         TourBasicDTO tourBasicDTO = new TourBasicDTO();
         tourBasicDTO.setId(tour.getId());
-        tourBasicDTO.setStartTime(tour.getStartTime());
+        tourBasicDTO.setStartTime(TourScheduler.convertLocalDateTimeToTimestamp(tour.getStartTime()));
         tourBasicDTO.setAccepted(tour.isAccepted());
         tourBasicDTO.setFinished(tour.isFinished());
         tourBasicDTO.setRealEstateId(tour.getRealEstate().getId());
@@ -26,13 +29,13 @@ public class TourMapper {
     public static Tour toTourEntity(TourBasicDTO tourBasicDTO, RealEstateService realEstateService, UserService userService, AgencyService agencyService) {
         Tour tour = new Tour();
         tour.setId(tourBasicDTO.getId());
-        tour.setStartTime(tourBasicDTO.getStartTime());
-        tour.setEndTime(tourBasicDTO.getStartTime().plusMinutes(30));
+        tour.setStartTime(TourScheduler.convertTimestampToLocalDateTime(tourBasicDTO.getStartTime()));
+        tour.setEndTime(tour.getStartTime().plusMinutes(30));
         tour.setAccepted(tourBasicDTO.isAccepted());
         tour.setFinished(tourBasicDTO.isFinished());
         tour.setRealEstate(realEstateService.findRealEstateById(tourBasicDTO.getRealEstateId()));
-        tour.setAgent((Agent) userService.findUserById(tourBasicDTO.getAgentId()));
-        tour.setAgency(agencyService.findAgencyByAgentId(tourBasicDTO.getAgentId()));
+        tour.setAgent(tour.getRealEstate().getAgent());
+        tour.setAgency(tour.getRealEstate().getAgency());
         tour.setGuest((Guest) userService.findUserById(tourBasicDTO.getGuestId()));
         return tour;
     }

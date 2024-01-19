@@ -6,6 +6,6 @@ public interface TourService {
     Tour save(Tour tour);
     int acceptTour(Long tourId);
     int declineTour(Long tourId);
-    void updateTourStatus();
+    void updateTourFinished();
 
 }
