@@ -60,6 +60,21 @@ public class RealEstateController {
         }
     }
 
+    @GetMapping(value="/owner/findAllRealEstatesByOwnerId", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('OWNER')")
+    public ResponseEntity<List<RealEstateBasicDTO>> findAllRealEstatesByOwnerId(HttpServletRequest request) {
+        try {
+            Long id = (Long) request.getAttribute("userId");
+            Agency agency = agencyService.findAgencyByOwnerId(id);
+            List<RealEstate> realEstates = agency.getRealEstates();
+            List<RealEstateBasicDTO> dto = new ArrayList<>();
+            return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, dto));
+        } catch(Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping(value="/agent/createRealEstate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('AGENT')")
     public ResponseEntity<RealEstateBasicDTO> createRealEstate(@RequestBody RealEstateBasicDTO realEstateBasicDTO, HttpServletRequest req) {
@@ -74,7 +89,7 @@ public class RealEstateController {
         }
     }
 
-    @PostMapping(value="deactivate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/deactivateRealEstate", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('OWNER', 'AGENT', 'ADMINISTRATOR')")
     public ResponseEntity<?> deactivateRealEstate(@RequestParam Long id) {
         try {
@@ -88,7 +103,7 @@ public class RealEstateController {
         }
     }
 
-    @PostMapping(value="activate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/activateRealEstate", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('OWNER', 'AGENT', 'ADMINISTRATOR')")
     public ResponseEntity<?> activateRealEstate(@RequestParam Long id) {
         try {
