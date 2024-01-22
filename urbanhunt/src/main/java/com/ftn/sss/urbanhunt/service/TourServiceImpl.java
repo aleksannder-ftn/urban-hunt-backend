@@ -59,4 +59,14 @@ public class TourServiceImpl implements TourService {
         }
 
     }
+
+    @Override
+    public List<Tour> findAllByAgentId(Long agentId) {
+        return tourRepository.findAllByAgentId(agentId);
+    }
+
+    @Override
+    public List<Tour> findAllByAgencyId(Long agencyId) {
+        return tourRepository.findAllByAgencyId(agencyId);
+    }
 }

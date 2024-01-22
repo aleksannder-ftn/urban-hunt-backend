@@ -8,4 +8,8 @@ import java.util.List;
 public interface TourRepository extends JpaRepository<Tour, Long> {
 
     List<Tour> getAllByAcceptedAndFinished(boolean accepted, boolean finished);
+
+    List<Tour> findAllByAgentId(Long agentId);
+
+    List<Tour> findAllByAgencyId(Long agencyId);
 }

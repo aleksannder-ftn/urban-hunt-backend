@@ -52,7 +52,7 @@ public class TourController {
         }
     }
 
-    @PostMapping(value="acceptTour")
+    @PostMapping(value="/agentAndOwner/calendarAcceptRequest")
     @PreAuthorize("hasAnyAuthority('AGENT', 'OWNER')")
     public ResponseEntity<?> acceptTour(@RequestParam Long tourId) {
         try {
@@ -67,7 +67,7 @@ public class TourController {
         }
     }
 
-    @PostMapping(value="declineTour")
+    @PostMapping(value="/agentAndOwner/calendarDeleteRequest")
     @PreAuthorize("hasAnyAuthority('AGENT', 'OWNER')")
     public ResponseEntity<?> declineTour(@RequestParam Long tourId) {
         try {
