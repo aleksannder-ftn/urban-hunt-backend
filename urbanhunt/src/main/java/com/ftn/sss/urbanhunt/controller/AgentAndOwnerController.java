@@ -12,12 +12,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/agentAndOwner")
 public class AgentAndOwnerController {
 
     private final TourService tourService;
@@ -26,7 +28,7 @@ public class AgentAndOwnerController {
     public AgentAndOwnerController(TourService tourService) {
         this.tourService = tourService;
     }
-    @GetMapping(value="findCalendarByUserId", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="findCalendar", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('AGENT')")
     public ResponseEntity<?> findCalendarByUserId(HttpServletRequest request) {
         try {
@@ -39,7 +41,7 @@ public class AgentAndOwnerController {
         }
     }
 
-    @GetMapping(value="findCalendarByAgencyId")
+    @GetMapping(value="findCalendarByAgency", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('OWNER')")
     public ResponseEntity<?> findCalendarByAgencyId(@RequestParam Long agencyId) {
         try {
