@@ -33,6 +33,7 @@ public class GuestServiceImpl implements GuestService {
             } else {
                 guest.getRealEstateRating().put(realEstate, false);
             }
+            guestRepository.save(guest);
             return 1;
         } catch (Exception e) {
             return 0;

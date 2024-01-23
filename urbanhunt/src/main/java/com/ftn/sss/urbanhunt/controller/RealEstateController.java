@@ -177,17 +177,14 @@ public class RealEstateController {
         }
     }
 
-    @GetMapping(value="checkIsLiked", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('GUEST')")
-    public ResponseEntity<Boolean> checkIsLiked(@RequestBody Map<String, Object> payload, HttpServletRequest request) {
+    @GetMapping(value="checkIsLiked")
+    public ResponseEntity<Boolean> checkIsLiked(@RequestParam Long realEstateId, HttpServletRequest request) {
         try {
-            Long realEstateId = Long.parseLong(payload.get("realEstateId").toString());
             Long userId = (Long) request.getAttribute("userId");
             RealEstate realEstate = realEstateService.findRealEstateById(realEstateId);
             User user = userService.findUserById(userId);
 
             Boolean isLiked = guestService.checkIsLiked(realEstate, user);
-
             return ResponseEntity.ok(isLiked);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
