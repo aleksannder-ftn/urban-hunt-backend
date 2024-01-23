@@ -129,7 +129,7 @@ public class RealEstateController {
         }
     }
 
-    @PostMapping(value="/editRealEstate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/agent/editRealEstate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('AGENT')")
     public ResponseEntity<?> editRealEstate(@RequestBody RealEstateBasicDTO realEstateBasicDTO) {
         try {

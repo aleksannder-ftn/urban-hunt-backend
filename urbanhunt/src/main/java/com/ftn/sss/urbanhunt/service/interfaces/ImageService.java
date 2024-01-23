@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface ImageService {
     List<Image> findAllByRealEstateId(Long id);
     Image save(Image image);
-    void deleteAllByRealEstateId(Long id);
+    void deleteAllByRealEstate(RealEstate realEstate);
 }

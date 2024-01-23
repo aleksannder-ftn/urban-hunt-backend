@@ -1,6 +1,7 @@
 package com.ftn.sss.urbanhunt.service;
 
 import com.ftn.sss.urbanhunt.model.Image;
+import com.ftn.sss.urbanhunt.model.RealEstate;
 import com.ftn.sss.urbanhunt.repository.interfaces.ImageRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteAllByRealEstateId(Long id) {
-        imageRepository.deleteAllByRealEstateId(id);
+    public void deleteAllByRealEstate(RealEstate realEstate) {
+        imageRepository.deleteByRealEstate(realEstate);
     }
 }

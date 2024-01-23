@@ -85,8 +85,8 @@ public class RealEstateServiceImpl implements RealEstateService {
         realEstateForEdit.setPrice(requestDTO.getPrice());
         realEstateForEdit.setRealEstateType(requestDTO.getRealEstateType());
         realEstateForEdit.setLocation(requestDTO.getLocation());
-
-        imageService.deleteAllByRealEstateId(realEstateForEdit.getId());
+/*
+        imageService.deleteAllByRealEstate(realEstateForEdit);
 
         if (requestDTO.getImages() != null) {
             for (String imagePath : requestDTO.getImages()) {
@@ -95,7 +95,7 @@ public class RealEstateServiceImpl implements RealEstateService {
                 image.setRealEstate(realEstateForEdit);
                 imageService.save(image);
             }
-        }
+        } */
 
         return realEstateRepository.save(realEstateForEdit);
     }
