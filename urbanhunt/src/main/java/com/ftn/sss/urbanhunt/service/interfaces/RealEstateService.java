@@ -2,14 +2,17 @@ package com.ftn.sss.urbanhunt.service.interfaces;
 
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
 import com.ftn.sss.urbanhunt.model.RealEstate;
+import com.ftn.sss.urbanhunt.model.User;
+import com.ftn.sss.urbanhunt.model.enums.RealEstateType;
+import com.ftn.sss.urbanhunt.model.enums.TransactionType;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface RealEstateService {
     List<RealEstate> findAll();
-    List<RealEstate> findAllByAgentIdAndOptionalFields(Long id, String location, Double surfaceFrom, Double surfaceTo,
-                                                       Double priceFrom, Double priceTo, String type, String transactionType);
+    List<RealEstate> findAllByAgentIdAndOptionalFields(User user, String location, Float surfaceFrom, Float surfaceTo,
+                                                       Float priceFrom, Float priceTo, RealEstateType type, TransactionType transactionType);
     Optional<RealEstate> findById(Long id);
     RealEstate findRealEstateById(Long id);
     Optional<RealEstate> save(RealEstate realEstate);

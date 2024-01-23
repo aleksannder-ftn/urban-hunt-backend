@@ -5,6 +5,9 @@ import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.Image;
 import com.ftn.sss.urbanhunt.model.RealEstate;
+import com.ftn.sss.urbanhunt.model.User;
+import com.ftn.sss.urbanhunt.model.enums.RealEstateType;
+import com.ftn.sss.urbanhunt.model.enums.TransactionType;
 import com.ftn.sss.urbanhunt.repository.interfaces.RealEstateRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
@@ -33,17 +36,12 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public List<RealEstate> findAllByAgentIdAndOptionalFields(Long id, String location,
-                                                              Double surfaceFrom, Double surfaceTo,
-                                                              Double priceFrom, Double priceTo, String type,
-                                                              String transactionType) {
-        if (type == null) {
-            type = "";
-        }
-        if (transactionType == null) {
-            transactionType = "";
-        }
-        return realEstateRepository.findAllByAgentIdAndOptionalFields(id, location, surfaceFrom, surfaceTo, priceFrom, priceTo, type, transactionType);
+    public List<RealEstate> findAllByAgentIdAndOptionalFields(User user, String location,
+                                                              Float surfaceFrom, Float surfaceTo,
+                                                              Float priceFrom, Float priceTo, RealEstateType type,
+                                                              TransactionType transactionType) {
+
+        return realEstateRepository.findAllByAgentIdAndOptionalFields((Agent) user, location, surfaceFrom, surfaceTo, priceFrom, priceTo, type, transactionType);
     }
 
     @Override

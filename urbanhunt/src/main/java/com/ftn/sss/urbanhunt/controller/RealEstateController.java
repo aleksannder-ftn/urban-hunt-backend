@@ -55,25 +55,32 @@ public class RealEstateController {
     @GetMapping(value="/findAllRealEstates", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RealEstateBasicDTO>> findAllRealEstates(
             @RequestParam(name="location", required = false) String location,
-            @RequestParam(name="surfaceFrom", required = false) Double surfaceFrom,
-            @RequestParam(name="surfaceTo", required = false) Double surfaceTo,
-            @RequestParam(name="priceFrom", required = false) Double priceFrom,
-            @RequestParam(name="priceTo", required = false) Double priceTo,
-            @RequestParam(name="transactionType", required = false) String transactionType,
-            @RequestParam(name="realEstateType", required = false) String realEstateType,
+            @RequestParam(name="surfaceFrom", required = false) Float surfaceFrom,
+            @RequestParam(name="surfaceTo", required = false) Float surfaceTo,
+            @RequestParam(name="priceFrom", required = false) Float priceFrom,
+            @RequestParam(name="priceTo", required = false) Float priceTo,
+            @RequestParam(name="transactionType", required = false) TransactionType transactionType,
+            @RequestParam(name="realEstateType", required = false) RealEstateType realEstateType,
             HttpServletRequest request) {
         try {
+            if(transactionType == null) {
+                transactionType = TransactionType.RENT;
+            }
+            if(realEstateType == null) {
+                realEstateType = RealEstateType.HOUSE;
+            }
             List<RealEstate> realEstates;
             List<RealEstateBasicDTO> dto = new ArrayList<>();
             if(request.getAttribute("userId").equals("default")) {
-                realEstates = realEstateService.findAll();
+                realEstates = realEstateService.findAllByAgentIdAndOptionalFields(null, location, surfaceFrom, surfaceTo,
+                        priceFrom, priceTo, realEstateType, transactionType);
                 return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, dto));
             }
             Long id = (Long) request.getAttribute("userId");
             User user = userService.findUserById(id);
 
             if(user.getRole().equals(Role.AGENT)) {
-                realEstates = realEstateService.findAllByAgentIdAndOptionalFields(id, location, surfaceFrom, surfaceTo,
+                realEstates = realEstateService.findAllByAgentIdAndOptionalFields(user, location, surfaceFrom, surfaceTo,
                         priceFrom, priceTo, realEstateType, transactionType);
             } else {
                 realEstates = realEstateService.findAllByAgentIdAndOptionalFields(null, location, surfaceFrom, surfaceTo,
