@@ -11,8 +11,8 @@ import java.util.Optional;
 
 public interface RealEstateService {
     List<RealEstate> findAll();
-    List<RealEstate> findAllByAgentIdAndOptionalFields(User user, String location, Float surfaceFrom, Float surfaceTo,
-                                                       Float priceFrom, Float priceTo, RealEstateType type, TransactionType transactionType);
+    List<RealEstate> find(User user, String location, Float surfaceFrom, Float surfaceTo,
+                          Float priceFrom, Float priceTo, RealEstateType realEstateType, TransactionType transactionType);
     Optional<RealEstate> findById(Long id);
     RealEstate findRealEstateById(Long id);
     Optional<RealEstate> save(RealEstate realEstate);

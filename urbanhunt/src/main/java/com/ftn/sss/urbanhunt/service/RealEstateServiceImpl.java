@@ -9,12 +9,14 @@ import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.RealEstateType;
 import com.ftn.sss.urbanhunt.model.enums.TransactionType;
 import com.ftn.sss.urbanhunt.repository.interfaces.RealEstateRepository;
+import com.ftn.sss.urbanhunt.repository.interfaces.RealEstateSpecification;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
 import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,12 +38,13 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public List<RealEstate> findAllByAgentIdAndOptionalFields(User user, String location,
-                                                              Float surfaceFrom, Float surfaceTo,
-                                                              Float priceFrom, Float priceTo, RealEstateType type,
-                                                              TransactionType transactionType) {
+    public List<RealEstate> find(User user, String location,
+                                 Float surfaceFrom, Float surfaceTo,
+                                 Float priceFrom, Float priceTo, RealEstateType realEstateType,
+                                 TransactionType transactionType) {
 
-        return realEstateRepository.findAllByAgentIdAndOptionalFields((Agent) user, location, surfaceFrom, surfaceTo, priceFrom, priceTo, type, transactionType);
+        Specification<RealEstate> spec = RealEstateSpecification.withOptionalFields((Agent) user, location, surfaceFrom, surfaceTo, priceFrom, priceTo, realEstateType, transactionType);
+        return realEstateRepository.findAll(spec);
     }
 
     @Override

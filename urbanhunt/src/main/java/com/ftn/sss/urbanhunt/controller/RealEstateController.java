@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 public class RealEstateController {
@@ -53,40 +54,35 @@ public class RealEstateController {
     }
 
     @GetMapping(value="/findAllRealEstates", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RealEstateBasicDTO>> findAllRealEstates(
+    public ResponseEntity<?> findAllRealEstates(
             @RequestParam(name="location", required = false) String location,
             @RequestParam(name="surfaceFrom", required = false) Float surfaceFrom,
             @RequestParam(name="surfaceTo", required = false) Float surfaceTo,
             @RequestParam(name="priceFrom", required = false) Float priceFrom,
             @RequestParam(name="priceTo", required = false) Float priceTo,
-            @RequestParam(name="transactionType", required = false) TransactionType transactionType,
-            @RequestParam(name="realEstateType", required = false) RealEstateType realEstateType,
+            @RequestParam(name="transactionType", required = false) String transactionType,
+            @RequestParam(name="realEstateType", required = false) String realEstateType,
             HttpServletRequest request) {
         try {
-            if(transactionType == null) {
-                transactionType = TransactionType.RENT;
-            }
-            if(realEstateType == null) {
-                realEstateType = RealEstateType.HOUSE;
-            }
+            RealEstateType realEstateTypeSearch = (realEstateType != null && !realEstateType.isEmpty()) ? RealEstateType.valueOf(realEstateType.toUpperCase(Locale.ROOT)) : null;
+            TransactionType transactionTypeSearch = (transactionType != null && !transactionType.isEmpty()) ? TransactionType.valueOf(transactionType.toUpperCase(Locale.ROOT)) : null;
             List<RealEstate> realEstates;
-            List<RealEstateBasicDTO> dto = new ArrayList<>();
             if(request.getAttribute("userId").equals("default")) {
-                realEstates = realEstateService.findAllByAgentIdAndOptionalFields(null, location, surfaceFrom, surfaceTo,
-                        priceFrom, priceTo, realEstateType, transactionType);
-                return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, dto));
+                realEstates = realEstateService.find(null, location, surfaceFrom, surfaceTo,
+                        priceFrom, priceTo, realEstateTypeSearch,transactionTypeSearch);
+                return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, new ArrayList<RealEstateBasicDTO>()));
             }
             Long id = (Long) request.getAttribute("userId");
             User user = userService.findUserById(id);
 
             if(user.getRole().equals(Role.AGENT)) {
-                realEstates = realEstateService.findAllByAgentIdAndOptionalFields(user, location, surfaceFrom, surfaceTo,
-                        priceFrom, priceTo, realEstateType, transactionType);
+                realEstates = realEstateService.find(user, location, surfaceFrom, surfaceTo,
+                        priceFrom, priceTo, realEstateTypeSearch, transactionTypeSearch);
             } else {
-                realEstates = realEstateService.findAllByAgentIdAndOptionalFields(null, location, surfaceFrom, surfaceTo,
-                        priceFrom, priceTo, realEstateType, transactionType);
+                realEstates = realEstateService.find(null, location, surfaceFrom, surfaceTo,
+                        priceFrom, priceTo, realEstateTypeSearch, transactionTypeSearch);
             }
-            return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, dto));
+            return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, new ArrayList<RealEstateBasicDTO>()));
         } catch(Exception e) {
             System.out.println(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
