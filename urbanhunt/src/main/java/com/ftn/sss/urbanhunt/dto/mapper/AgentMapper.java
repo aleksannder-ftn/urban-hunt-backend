@@ -1,10 +1,8 @@
 package com.ftn.sss.urbanhunt.dto.mapper;
 
 import com.ftn.sss.urbanhunt.dto.agent.AgentBasicDTO;
-import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
-import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 
 public class AgentMapper {
 

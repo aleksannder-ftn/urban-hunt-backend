@@ -1,15 +1,12 @@
 package com.ftn.sss.urbanhunt.dto.mapper;
 
 import com.ftn.sss.urbanhunt.dto.tour.TourBasicDTO;
-import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.Guest;
 import com.ftn.sss.urbanhunt.model.Tour;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import com.ftn.sss.urbanhunt.util.TourScheduler;
-
-import java.time.LocalDateTime;
 
 public class TourMapper {
 

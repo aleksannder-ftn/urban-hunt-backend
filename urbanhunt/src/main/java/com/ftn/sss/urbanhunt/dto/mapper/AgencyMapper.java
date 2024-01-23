@@ -3,11 +3,9 @@ package com.ftn.sss.urbanhunt.dto.mapper;
 import com.ftn.sss.urbanhunt.dto.agency.AgencyBasicDTO;
 import com.ftn.sss.urbanhunt.dto.agency.AgencyDetailedDTO;
 import com.ftn.sss.urbanhunt.model.Agency;
-import com.ftn.sss.urbanhunt.model.Owner;
 import com.ftn.sss.urbanhunt.model.RealEstate;
 import com.ftn.sss.urbanhunt.model.Tour;
 import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
-import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 
 import java.util.stream.Collectors;
 

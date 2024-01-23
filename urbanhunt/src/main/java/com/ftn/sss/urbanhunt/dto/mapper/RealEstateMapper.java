@@ -6,13 +6,9 @@ import com.ftn.sss.urbanhunt.model.Image;
 import com.ftn.sss.urbanhunt.model.RealEstate;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
-import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RealEstateMapper {
 

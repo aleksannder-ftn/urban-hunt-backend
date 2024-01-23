@@ -33,8 +33,17 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public List<RealEstate> findAllByAgentId(Long id) {
-        return realEstateRepository.findAllByAgentId(id);
+    public List<RealEstate> findAllByAgentIdAndOptionalFields(Long id, String location,
+                                                              Double surfaceFrom, Double surfaceTo,
+                                                              Double priceFrom, Double priceTo, String type,
+                                                              String transactionType) {
+        if (type == null) {
+            type = "";
+        }
+        if (transactionType == null) {
+            transactionType = "";
+        }
+        return realEstateRepository.findAllByAgentIdAndOptionalFields(id, location, surfaceFrom, surfaceTo, priceFrom, priceTo, type, transactionType);
     }
 
     @Override

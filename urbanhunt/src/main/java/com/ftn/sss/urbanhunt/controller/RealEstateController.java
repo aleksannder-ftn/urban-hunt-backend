@@ -2,8 +2,12 @@ package com.ftn.sss.urbanhunt.controller;
 
 import com.ftn.sss.urbanhunt.dto.mapper.RealEstateMapper;
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
-import com.ftn.sss.urbanhunt.model.*;
+import com.ftn.sss.urbanhunt.model.Agency;
+import com.ftn.sss.urbanhunt.model.RealEstate;
+import com.ftn.sss.urbanhunt.model.User;
+import com.ftn.sss.urbanhunt.model.enums.RealEstateType;
 import com.ftn.sss.urbanhunt.model.enums.Role;
+import com.ftn.sss.urbanhunt.model.enums.TransactionType;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
 import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
@@ -49,7 +53,15 @@ public class RealEstateController {
     }
 
     @GetMapping(value="/findAllRealEstates", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RealEstateBasicDTO>> findAllRealEstates(HttpServletRequest request) {
+    public ResponseEntity<List<RealEstateBasicDTO>> findAllRealEstates(
+            @RequestParam(name="location", required = false) String location,
+            @RequestParam(name="surfaceFrom", required = false) Double surfaceFrom,
+            @RequestParam(name="surfaceTo", required = false) Double surfaceTo,
+            @RequestParam(name="priceFrom", required = false) Double priceFrom,
+            @RequestParam(name="priceTo", required = false) Double priceTo,
+            @RequestParam(name="transactionType", required = false) String transactionType,
+            @RequestParam(name="realEstateType", required = false) String realEstateType,
+            HttpServletRequest request) {
         try {
             List<RealEstate> realEstates;
             List<RealEstateBasicDTO> dto = new ArrayList<>();
@@ -61,9 +73,11 @@ public class RealEstateController {
             User user = userService.findUserById(id);
 
             if(user.getRole().equals(Role.AGENT)) {
-                realEstates = realEstateService.findAllByAgentId(id);
+                realEstates = realEstateService.findAllByAgentIdAndOptionalFields(id, location, surfaceFrom, surfaceTo,
+                        priceFrom, priceTo, realEstateType, transactionType);
             } else {
-                realEstates = realEstateService.findAll();
+                realEstates = realEstateService.findAllByAgentIdAndOptionalFields(null, location, surfaceFrom, surfaceTo,
+                        priceFrom, priceTo, realEstateType, transactionType);
             }
             return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, dto));
         } catch(Exception e) {
