@@ -10,7 +10,6 @@ import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,19 @@ public class RealEstateController {
         this.agencyService = agencyService;
         this.imageService = imageService;
         this.realEstateService = realEstateService;
+    }
+
+    @GetMapping(value="/agent/findRealEstateById", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('AGENT')")
+    public ResponseEntity<RealEstateBasicDTO> getRealEstateById(@RequestParam Long id) {
+        try {
+            RealEstate realEstate = realEstateService.findRealEstateById(id);
+            RealEstateBasicDTO dto = new RealEstateBasicDTO();
+            return ResponseEntity.ok(RealEstateMapper.getRealEstateBasicDTO(realEstate, dto));
+        } catch(Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(value="/findAllRealEstates", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -117,5 +129,15 @@ public class RealEstateController {
         }
     }
 
+    @PostMapping(value="/editRealEstate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('AGENT')")
+    public ResponseEntity<?> editRealEstate(@RequestBody RealEstateBasicDTO realEstateBasicDTO) {
+        try {
+            RealEstate realEstate = realEstateService.editRealEstate(realEstateBasicDTO, agencyService, imageService);
+            return ResponseEntity.ok(RealEstateMapper.getRealEstateBasicDTO(realEstate, realEstateBasicDTO));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

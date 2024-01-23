@@ -31,7 +31,7 @@ public class AgentAndOwnerController {
     public ResponseEntity<?> findCalendarByUserId(HttpServletRequest request) {
         try {
             Long userId = (Long) request.getAttribute("userId");
-            List<Tour> tours = tourService.findAllByAgentId(userId);
+            List<Tour> tours = tourService.findAllByAgentIdAndAcceptedAndFinished(userId);
             List<TourBasicDTO> tourBasicDTOList = tours.stream().toList().stream().map(TourMapper::toTourBasicDTO).toList();
             return new ResponseEntity<>(tourBasicDTOList, HttpStatus.OK);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class AgentAndOwnerController {
     @PreAuthorize("hasAnyAuthority('OWNER')")
     public ResponseEntity<?> findCalendarByAgencyId(@RequestParam Long agencyId) {
         try {
-            List<Tour> tours = tourService.findAllByAgencyId(agencyId);
+            List<Tour> tours = tourService.findAllByAgencyIdAndAcceptedAndFinished(agencyId);
             List<TourBasicDTO> tourBasicDTOList = tours.stream().toList().stream().map(TourMapper::toTourBasicDTO).toList();
             return new ResponseEntity<>(tourBasicDTOList, HttpStatus.OK);
         } catch (Exception e) {

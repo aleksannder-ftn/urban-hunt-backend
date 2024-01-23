@@ -9,7 +9,7 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
 
     List<Tour> getAllByAcceptedAndFinished(boolean accepted, boolean finished);
 
-    List<Tour> findAllByAgentId(Long agentId);
+    List<Tour> findAllByAgentIdAndAcceptedAndFinished(Long agentId, boolean accepted, boolean finished);
 
-    List<Tour> findAllByAgencyId(Long agencyId);
+    List<Tour> findAllByAgencyIdAndAcceptedAndFinished(Long agencyId, boolean accepted, boolean finished);
 }

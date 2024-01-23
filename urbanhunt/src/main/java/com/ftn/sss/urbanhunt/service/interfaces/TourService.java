@@ -9,7 +9,7 @@ public interface TourService {
     int acceptTour(Long tourId);
     int declineTour(Long tourId);
     void updateTourFinished();
-    List<Tour> findAllByAgentId(Long agentId);
-    List<Tour> findAllByAgencyId(Long agencyId);
+    List<Tour> findAllByAgentIdAndAcceptedAndFinished(Long agentId);
+    List<Tour> findAllByAgencyIdAndAcceptedAndFinished(Long agencyId);
 
 }

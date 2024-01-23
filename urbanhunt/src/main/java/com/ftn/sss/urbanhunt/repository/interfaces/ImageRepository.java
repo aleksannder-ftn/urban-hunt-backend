@@ -10,10 +10,6 @@ import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
     List<Image> findAllByRealEstateId(Long id);
-
-    /*
-    @Query("INSERT INTO Image (id, imagePath, realEstate) VALUES (:imageId, :imagePath, :realEstateId)")
-    void saveImage(@Param("imageId") Long imageId, @Param("imagePath") String imagePath, @Param("realEstateId") Long realEstateId); */
-
     Image save(Image image);
+    void deleteAllByRealEstateId(Long id);
 }

@@ -78,6 +78,29 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
+    public RealEstate editRealEstate(RealEstateBasicDTO requestDTO, AgencyService agencyService, ImageService imageService) {
+        RealEstate realEstateForEdit = realEstateRepository.findRealEstateById(requestDTO.getId());
+        realEstateForEdit.setSurfaceArea(requestDTO.getSurfaceArea());
+        realEstateForEdit.setTransactionType(requestDTO.getTransactionType());
+        realEstateForEdit.setPrice(requestDTO.getPrice());
+        realEstateForEdit.setRealEstateType(requestDTO.getRealEstateType());
+        realEstateForEdit.setLocation(requestDTO.getLocation());
+
+        imageService.deleteAllByRealEstateId(realEstateForEdit.getId());
+
+        if (requestDTO.getImages() != null) {
+            for (String imagePath : requestDTO.getImages()) {
+                Image image = new Image();
+                image.setImagePath(imagePath);
+                image.setRealEstate(realEstateForEdit);
+                imageService.save(image);
+            }
+        }
+
+        return realEstateRepository.save(realEstateForEdit);
+    }
+
+    @Override
     public int activateRealEstate(Long id) {
         RealEstate realEstate = realEstateRepository.findRealEstateById(id);
         if (realEstate == null) {

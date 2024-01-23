@@ -15,6 +15,7 @@ public interface RealEstateService {
     Optional<RealEstate> save(RealEstate realEstate);
     void delete(RealEstate realEstate);
     RealEstate addRealEstateWithImages(RealEstateBasicDTO requestDto, UserService userService, AgencyService agencyService, ImageService imageService);
+    RealEstate editRealEstate(RealEstateBasicDTO requestDTO, AgencyService agencyService, ImageService imageService);
     int activateRealEstate(Long id);
     int deactivateRealEstate(Long id);
 }
