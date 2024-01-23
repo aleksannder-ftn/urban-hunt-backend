@@ -8,10 +8,7 @@ import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.RealEstateType;
 import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.model.enums.TransactionType;
-import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
-import com.ftn.sss.urbanhunt.service.interfaces.ImageService;
-import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
-import com.ftn.sss.urbanhunt.service.interfaces.UserService;
+import com.ftn.sss.urbanhunt.service.interfaces.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @RestController
 public class RealEstateController {
@@ -31,13 +29,15 @@ public class RealEstateController {
     private final AgencyService agencyService;
     private final ImageService imageService;
     private final RealEstateService realEstateService;
+    private final GuestService guestService;
 
     @Autowired
-    public RealEstateController(UserService userService, AgencyService agencyService, ImageService imageService, RealEstateService realEstateService) {
+    public RealEstateController(UserService userService, AgencyService agencyService, ImageService imageService, RealEstateService realEstateService, GuestService guestService) {
         this.userService = userService;
         this.agencyService = agencyService;
         this.imageService = imageService;
         this.realEstateService = realEstateService;
+        this.guestService = guestService;
     }
 
     @GetMapping(value="/agent/findRealEstateById", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -157,4 +157,40 @@ public class RealEstateController {
         }
     }
 
+    @PostMapping(value="sendLike", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<?> likeRealEstate(@RequestBody Map<String, Object> payload, HttpServletRequest req) {
+        try {
+            Long realEstateId = Long.parseLong(payload.get("realEstateId").toString());
+            Long userId = (Long) req.getAttribute("userId");
+            Boolean isLiked = (Boolean) payload.get("isLiked");
+
+            boolean success = guestService.rateRealEstate(realEstateId, userId, isLiked) == 1;
+
+            if(success) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value="checkIsLiked", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<Boolean> checkIsLiked(@RequestBody Map<String, Object> payload, HttpServletRequest request) {
+        try {
+            Long realEstateId = Long.parseLong(payload.get("realEstateId").toString());
+            Long userId = (Long) request.getAttribute("userId");
+            RealEstate realEstate = realEstateService.findRealEstateById(realEstateId);
+            User user = userService.findUserById(userId);
+
+            Boolean isLiked = guestService.checkIsLiked(realEstate, user);
+
+            return ResponseEntity.ok(isLiked);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
