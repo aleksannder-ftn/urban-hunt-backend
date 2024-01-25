@@ -5,14 +5,12 @@ import com.ftn.sss.urbanhunt.dto.agent.AgentBasicDTO;
 import com.ftn.sss.urbanhunt.dto.mapper.AgencyMapper;
 import com.ftn.sss.urbanhunt.dto.mapper.AgentMapper;
 import com.ftn.sss.urbanhunt.dto.mapper.UserMapper;
+import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateDetailedDTO;
 import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
 import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.Owner;
-import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
-import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
-import com.ftn.sss.urbanhunt.service.interfaces.OwnerService;
-import com.ftn.sss.urbanhunt.service.interfaces.UserService;
+import com.ftn.sss.urbanhunt.service.interfaces.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @RestController
@@ -32,13 +31,15 @@ public class OwnerController {
     private final OwnerService ownerService;
     private final AgencyService agencyService;
     private final AgentService agentService;
+    private final RealEstateService realEstateService;
 
     @Autowired
-    public OwnerController(UserService userService, AgencyService agencyService, OwnerService ownerService, AgentService agentService) {
+    public OwnerController(UserService userService, AgencyService agencyService, OwnerService ownerService, AgentService agentService, RealEstateService realEstateService) {
         this.agencyService = agencyService;
         this.userService = userService;
         this.ownerService = ownerService;
         this.agentService = agentService;
+        this.realEstateService = realEstateService;
     }
 
     @PostMapping(value="/createAgency", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -134,4 +135,16 @@ public class OwnerController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value = "/findMostPopularRealEstatesByAgencyId", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<List<RealEstateDetailedDTO>> findMostPopularRealEstatesByAgencyId(@RequestParam Long agencyId) {
+        try {
+            List<RealEstateDetailedDTO> dtoList = realEstateService.findAllByPopularity();
+            return ResponseEntity.ok(dtoList);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

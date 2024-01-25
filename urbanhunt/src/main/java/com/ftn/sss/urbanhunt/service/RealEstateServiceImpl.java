@@ -2,6 +2,7 @@ package com.ftn.sss.urbanhunt.service;
 
 import com.ftn.sss.urbanhunt.dto.mapper.RealEstateMapper;
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
+import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateDetailedDTO;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.Image;
 import com.ftn.sss.urbanhunt.model.RealEstate;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -134,5 +136,25 @@ public class RealEstateServiceImpl implements RealEstateService {
         realEstate.setActive(false);
         realEstateRepository.save(realEstate);
         return 1;
+    }
+
+    @Override
+    public List<RealEstateDetailedDTO> findAllByPopularity() {
+        List<Object[]> resultList = realEstateRepository.findAllByPopularity();
+        List<RealEstateDetailedDTO> resultDTOList = new ArrayList<>();
+
+        for (Object[] result : resultList) {
+            RealEstateDetailedDTO dto = new RealEstateDetailedDTO();
+            dto.setId((Long) result[0]);
+            dto.setLocation((String) result[1]);
+            dto.setPrice((Float) result[2]);
+            dto.setSurfaceArea((Float) result[3]);
+            // for enums need to be added as result[4] and result[5]
+            dto.setNumberOfActiveTours((Long) result[6]);
+
+            resultDTOList.add(dto);
+        }
+
+        return resultDTOList;
     }
 }

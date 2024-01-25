@@ -1,6 +1,7 @@
 package com.ftn.sss.urbanhunt.dto.mapper;
 
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
+import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateDetailedDTO;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.Image;
 import com.ftn.sss.urbanhunt.model.RealEstate;
@@ -68,5 +69,40 @@ public class RealEstateMapper {
         realEstate.setImage(imageService.findAllByRealEstateId(realEstateBasicDTO.getId()));
 
         return realEstate;
+    }
+
+    // ONLY TRANSFER FOR POPULARITY.
+    public static Object RealEstateDetailedDTO(RealEstate realEstate) {
+        if (realEstate == null) return null;
+        RealEstateDetailedDTO dto = new RealEstateDetailedDTO();
+        return getRealEstateDetailedDTO(realEstate, dto);
+    }
+
+    public static RealEstateDetailedDTO getRealEstateDetailedDTO(RealEstate realEstate, RealEstateDetailedDTO realEstateDetailedDTO) {
+        realEstateDetailedDTO.setId(realEstate.getId());
+        realEstateDetailedDTO.setRealEstateType(realEstate.getRealEstateType());
+        realEstateDetailedDTO.setActive(realEstate.isActive());
+        realEstateDetailedDTO.setLocation(realEstate.getLocation());
+        realEstateDetailedDTO.setPrice(realEstate.getPrice());
+        realEstateDetailedDTO.setRating(realEstate.getRating());
+        realEstateDetailedDTO.setViewCount(realEstate.getViewCount());
+        realEstateDetailedDTO.setTransactionType(realEstate.getTransactionType());
+        realEstateDetailedDTO.setSurfaceArea(realEstate.getSurfaceArea());
+        realEstateDetailedDTO.setAgentId(realEstate.getAgent().getId());
+        realEstateDetailedDTO.setAgencyId(realEstate.getAgency().getId());
+        List<Image> images = realEstate.getImage();
+        List<String> imagePaths = images.stream().map(Image:: getImagePath).toList();
+        realEstateDetailedDTO.setImages(imagePaths);
+        realEstateDetailedDTO.setNumberOfActiveTours(null);
+        return realEstateDetailedDTO;
+    }
+
+    public static List<RealEstateDetailedDTO> toRealEstateDetailedListDTO(List<RealEstate> realEstates, List<RealEstateDetailedDTO> dto) {
+        for(RealEstate r : realEstates) {
+            RealEstateDetailedDTO basic = new RealEstateDetailedDTO();
+            dto.add(RealEstateMapper.getRealEstateDetailedDTO(r, basic));
+        }
+
+        return dto;
     }
 }
