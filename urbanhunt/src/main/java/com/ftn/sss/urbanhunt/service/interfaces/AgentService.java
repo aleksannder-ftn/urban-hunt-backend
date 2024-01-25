@@ -16,4 +16,5 @@ public interface AgentService {
     List<Agent> findAllAgents();
 
     List<Agent> findAllAgentsByAgencyId(Long agencyId);
+    List<Agent> findMostPopularAgentsByAgencyId(Long agencyId);
 }

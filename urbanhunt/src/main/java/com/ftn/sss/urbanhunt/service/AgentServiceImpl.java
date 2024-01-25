@@ -1,7 +1,9 @@
 package com.ftn.sss.urbanhunt.service;
 
+import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.repository.interfaces.AgentRepository;
+import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import java.util.Optional;
 @Service
 public class AgentServiceImpl implements AgentService {
     private final AgentRepository agentRepository;
+    private final AgencyService agencyService;
 
     @Autowired
-    public AgentServiceImpl(AgentRepository agentRepository) {
+    public AgentServiceImpl(AgentRepository agentRepository, AgencyService agencyService) {
         this.agentRepository = agentRepository;
+        this.agencyService = agencyService;
     }
 
     @Override
@@ -42,5 +46,11 @@ public class AgentServiceImpl implements AgentService {
     @Override
     public List<Agent> findAllAgentsByAgencyId(Long agencyId) {
         return agentRepository.findAllAgentsByAgencyId(agencyId);
+    }
+
+    @Override
+    public List<Agent> findMostPopularAgentsByAgencyId(Long agencyId) {
+        Agency ag = agencyService.findAgencyById(agencyId);
+        return agentRepository.findMostPopularAgentsByAgencyId(ag);
     }
 }

@@ -120,4 +120,18 @@ public class OwnerController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value="/findMostPopularAgentsByAgencyId", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<List<AgentBasicDTO>> findMostPopularAgentsByAgencyId(@RequestParam Long agencyId) {
+        try {
+            List<Agent> agents = agentService.findMostPopularAgentsByAgencyId(agencyId);
+            List<AgentBasicDTO> dtoList = agents.stream()
+                    .map(AgentMapper::toAgentBasicDTO)
+                    .toList();
+            return ResponseEntity.ok(dtoList);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

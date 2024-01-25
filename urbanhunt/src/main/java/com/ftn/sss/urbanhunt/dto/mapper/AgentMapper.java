@@ -25,6 +25,7 @@ public class AgentMapper {
         dto.setActive(agent.isActive());
         dto.setRole(agent.getRole());
         dto.setAgencyId(agent.getAgency().getId());
+        dto.setAverageRating(agent.getAverageRating());
         return dto;
     }
 
@@ -44,6 +45,7 @@ public class AgentMapper {
         agent.setActive(dto.isActive());
         agent.setRole(dto.getRole());
         agent.setAgency(agencyService.findAgencyById(dto.getAgencyId()));
+        agent.setAverageRating(dto.getAverageRating());
 
         return agent;
     }

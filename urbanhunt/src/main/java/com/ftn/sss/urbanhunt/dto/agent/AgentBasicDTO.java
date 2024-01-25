@@ -12,4 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AgentBasicDTO extends UserBasicDTO {
     private Long agencyId;
+    private Float averageRating;
 }
