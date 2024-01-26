@@ -149,7 +149,12 @@ public class RealEstateServiceImpl implements RealEstateService {
             dto.setLocation((String) result[1]);
             dto.setPrice((Float) result[2]);
             dto.setSurfaceArea((Float) result[3]);
-            // for enums need to be added as result[4] and result[5]
+            String transactionTypeString = (String) result[4];
+            TransactionType transactionType = TransactionType.valueOf(transactionTypeString);
+            dto.setTransactionType(transactionType);
+            String realEstateTypeString = (String) result[5];
+            RealEstateType realEstateType = RealEstateType.valueOf(realEstateTypeString);
+            dto.setRealEstateType(realEstateType);
             dto.setNumberOfActiveTours((Long) result[6]);
 
             resultDTOList.add(dto);
