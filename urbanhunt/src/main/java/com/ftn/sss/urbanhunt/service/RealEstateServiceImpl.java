@@ -40,6 +40,11 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
+    public List<RealEstate> findByActiveTrue() {
+        return realEstateRepository.findByActiveTrue();
+    }
+
+    @Override
     public List<RealEstate> find(User user, String location,
                                  Float surfaceFrom, Float surfaceTo,
                                  Float priceFrom, Float priceTo, RealEstateType realEstateType,
@@ -161,5 +166,33 @@ public class RealEstateServiceImpl implements RealEstateService {
         }
 
         return resultDTOList;
+    }
+
+    @Override
+    public void rentRealEstate(Long realEstateId) {
+        realEstateRepository.rentRealEstate(realEstateId);
+    }
+
+    @Override
+    public void buyRealEstate(Long realEstateId) {
+        realEstateRepository.buyRealEstate(realEstateId);
+    }
+
+    @Override
+    public Float sumPricesForSoldRealEstates() {
+        Float soldPrices = realEstateRepository.sumPricesOfSoldRealEstates();
+        if(soldPrices != null) {
+            soldPrices /= 1000;
+        }
+        return soldPrices;
+    }
+
+    @Override
+    public Float sumPricesForRentedRealEstates() {
+        Float rentedPrices = realEstateRepository.sumPricesOfRentedRealEstates();
+        if(rentedPrices != null) {
+            rentedPrices /= 1000;
+        }
+        return rentedPrices;
     }
 }

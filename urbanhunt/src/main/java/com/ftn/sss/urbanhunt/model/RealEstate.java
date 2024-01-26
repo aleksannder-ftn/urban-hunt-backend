@@ -35,8 +35,11 @@ public class RealEstate {
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> image = new ArrayList<>();
 
-    @Column(name="view_count")
-    private Integer viewCount;
+    @Column(name="is_sold")
+    private Boolean sold;
+
+    @Column(name="is_rented")
+    private Boolean rented;
 
     @Column(name="rating")
     private Float rating;

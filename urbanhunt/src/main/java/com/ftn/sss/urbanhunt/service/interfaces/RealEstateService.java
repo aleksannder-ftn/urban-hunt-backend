@@ -6,13 +6,13 @@ import com.ftn.sss.urbanhunt.model.RealEstate;
 import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.RealEstateType;
 import com.ftn.sss.urbanhunt.model.enums.TransactionType;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface RealEstateService {
     List<RealEstate> findAll();
+    List<RealEstate> findByActiveTrue();
     List<RealEstate> find(User user, String location, Float surfaceFrom, Float surfaceTo,
                           Float priceFrom, Float priceTo, RealEstateType realEstateType, TransactionType transactionType);
     Optional<RealEstate> findById(Long id);
@@ -24,4 +24,8 @@ public interface RealEstateService {
     int activateRealEstate(Long id);
     int deactivateRealEstate(Long id);
     List<RealEstateDetailedDTO> findAllByPopularity();
+    void rentRealEstate(Long realEstateId);
+    void buyRealEstate(Long realEstateId);
+    Float sumPricesForSoldRealEstates();
+    Float sumPricesForRentedRealEstates();
 }

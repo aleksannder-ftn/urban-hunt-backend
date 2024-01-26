@@ -190,4 +190,23 @@ public class RealEstateController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(value="/guest/rentOrBuyRealEstate")
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<?> rentOrBuyRealEstate(@RequestParam String caseString, @RequestParam Long realEstateId) {
+        try {
+            RealEstate realEstate = realEstateService.findRealEstateById(realEstateId);
+            if(!realEstate.isActive() || (realEstate.getRented() || realEstate.getSold())) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if(caseString.equals("RENT")) {
+                realEstateService.rentRealEstate(realEstateId);
+            } else if(caseString.equals("SALE")) {
+                realEstateService.buyRealEstate(realEstateId);
+            }
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

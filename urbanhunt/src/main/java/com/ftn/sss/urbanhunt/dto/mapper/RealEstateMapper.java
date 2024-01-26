@@ -26,7 +26,6 @@ public class RealEstateMapper {
         realEstateBasicDTO.setLocation(realEstate.getLocation());
         realEstateBasicDTO.setPrice(realEstate.getPrice());
         realEstateBasicDTO.setRating(realEstate.getRating());
-        realEstateBasicDTO.setViewCount(realEstate.getViewCount());
         realEstateBasicDTO.setTransactionType(realEstate.getTransactionType());
         realEstateBasicDTO.setSurfaceArea(realEstate.getSurfaceArea());
         realEstateBasicDTO.setAgentId(realEstate.getAgent().getId());
@@ -34,6 +33,8 @@ public class RealEstateMapper {
         List<Image> images = realEstate.getImage();
         List<String> imagePaths = images.stream().map(Image:: getImagePath).toList();
         realEstateBasicDTO.setImages(imagePaths);
+        realEstateBasicDTO.setSold(realEstate.getSold());
+        realEstateBasicDTO.setRented(realEstate.getRented());
         return realEstateBasicDTO;
     }
 
@@ -61,48 +62,14 @@ public class RealEstateMapper {
         realEstate.setLocation(realEstateBasicDTO.getLocation());
         realEstate.setPrice(realEstateBasicDTO.getPrice());
         realEstate.setRating(realEstateBasicDTO.getRating());
-        realEstate.setViewCount(realEstateBasicDTO.getViewCount());
         realEstate.setTransactionType(realEstateBasicDTO.getTransactionType());
         realEstate.setSurfaceArea(realEstateBasicDTO.getSurfaceArea());
         realEstate.setAgent((Agent) userService.findUserById(realEstateBasicDTO.getAgentId()));
         realEstate.setAgency(agencyService.findAgencyById(realEstateBasicDTO.getAgencyId()));
         realEstate.setImage(imageService.findAllByRealEstateId(realEstateBasicDTO.getId()));
+        realEstate.setSold(realEstateBasicDTO.getSold());
+        realEstate.setRented(realEstateBasicDTO.getRented());
 
         return realEstate;
-    }
-
-    // ONLY TRANSFER FOR POPULARITY.
-    public static Object RealEstateDetailedDTO(RealEstate realEstate) {
-        if (realEstate == null) return null;
-        RealEstateDetailedDTO dto = new RealEstateDetailedDTO();
-        return getRealEstateDetailedDTO(realEstate, dto);
-    }
-
-    public static RealEstateDetailedDTO getRealEstateDetailedDTO(RealEstate realEstate, RealEstateDetailedDTO realEstateDetailedDTO) {
-        realEstateDetailedDTO.setId(realEstate.getId());
-        realEstateDetailedDTO.setRealEstateType(realEstate.getRealEstateType());
-        realEstateDetailedDTO.setActive(realEstate.isActive());
-        realEstateDetailedDTO.setLocation(realEstate.getLocation());
-        realEstateDetailedDTO.setPrice(realEstate.getPrice());
-        realEstateDetailedDTO.setRating(realEstate.getRating());
-        realEstateDetailedDTO.setViewCount(realEstate.getViewCount());
-        realEstateDetailedDTO.setTransactionType(realEstate.getTransactionType());
-        realEstateDetailedDTO.setSurfaceArea(realEstate.getSurfaceArea());
-        realEstateDetailedDTO.setAgentId(realEstate.getAgent().getId());
-        realEstateDetailedDTO.setAgencyId(realEstate.getAgency().getId());
-        List<Image> images = realEstate.getImage();
-        List<String> imagePaths = images.stream().map(Image:: getImagePath).toList();
-        realEstateDetailedDTO.setImages(imagePaths);
-        realEstateDetailedDTO.setNumberOfActiveTours(null);
-        return realEstateDetailedDTO;
-    }
-
-    public static List<RealEstateDetailedDTO> toRealEstateDetailedListDTO(List<RealEstate> realEstates, List<RealEstateDetailedDTO> dto) {
-        for(RealEstate r : realEstates) {
-            RealEstateDetailedDTO basic = new RealEstateDetailedDTO();
-            dto.add(RealEstateMapper.getRealEstateDetailedDTO(r, basic));
-        }
-
-        return dto;
     }
 }

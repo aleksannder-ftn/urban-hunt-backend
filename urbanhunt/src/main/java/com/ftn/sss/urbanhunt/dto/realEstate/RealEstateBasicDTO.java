@@ -27,5 +27,6 @@ public class RealEstateBasicDTO {
     private Float rating;
     private Float surfaceArea;
     private TransactionType transactionType;
-    private Integer viewCount;
+    private Boolean sold;
+    private Boolean rented;
 }
