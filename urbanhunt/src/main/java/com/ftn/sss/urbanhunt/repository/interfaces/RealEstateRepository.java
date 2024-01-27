@@ -1,5 +1,6 @@
 package com.ftn.sss.urbanhunt.repository.interfaces;
 
+import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.RealEstate;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.domain.Specification;
@@ -49,4 +50,6 @@ public interface RealEstateRepository extends JpaRepository<RealEstate, Long>, J
                     "FROM real_estate re " +
                     "WHERE re.is_rented = true")
     Float sumPricesOfRentedRealEstates();
+
+    Agent findAgentById(Long id);
 }

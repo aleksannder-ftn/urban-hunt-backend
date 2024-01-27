@@ -37,4 +37,15 @@ public class AgentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value="/findAgentIdFromToken", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('AGENT')")
+    public ResponseEntity<?> findAgentIdFromToken(HttpServletRequest request) {
+        try {
+            Long id = (Long) request.getAttribute("userId");
+            return ResponseEntity.ok(id);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

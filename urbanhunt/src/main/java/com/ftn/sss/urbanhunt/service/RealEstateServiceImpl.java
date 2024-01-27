@@ -195,4 +195,9 @@ public class RealEstateServiceImpl implements RealEstateService {
         }
         return rentedPrices;
     }
+
+    @Override
+    public Agent findAgentById(Long id) {
+        return realEstateRepository.findAgentById(id);
+    }
 }

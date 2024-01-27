@@ -2,6 +2,7 @@ package com.ftn.sss.urbanhunt.service.interfaces;
 
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateDetailedDTO;
+import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.RealEstate;
 import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.model.enums.RealEstateType;
@@ -28,4 +29,5 @@ public interface RealEstateService {
     void buyRealEstate(Long realEstateId);
     Float sumPricesForSoldRealEstates();
     Float sumPricesForRentedRealEstates();
+    Agent findAgentById(Long id);
 }
