@@ -69,7 +69,7 @@ public class RealEstateController {
             List<RealEstate> realEstates;
             if(request.getAttribute("userId").equals("default")) {
                 realEstates = realEstateService.find(null, location, surfaceFrom, surfaceTo,
-                        priceFrom, priceTo, realEstateTypeSearch,transactionTypeSearch);
+                        priceFrom, priceTo, realEstateTypeSearch, transactionTypeSearch) .stream() .filter(RealEstate::isActive).toList();
                 return ResponseEntity.ok(RealEstateMapper.toRealEstateListDTO(realEstates, new ArrayList<RealEstateBasicDTO>()));
             }
             Long id = (Long) request.getAttribute("userId");
@@ -78,7 +78,11 @@ public class RealEstateController {
             if(user.getRole().equals(Role.AGENT)) {
                 realEstates = realEstateService.find(user, location, surfaceFrom, surfaceTo,
                         priceFrom, priceTo, realEstateTypeSearch, transactionTypeSearch);
-            } else {
+            } else if(user.getRole().equals(Role.GUEST)) {
+                realEstates = realEstateService.find(null, location, surfaceFrom, surfaceTo,
+                        priceFrom, priceTo, realEstateTypeSearch, transactionTypeSearch) .stream() .filter(RealEstate::isActive).toList();
+            }
+            else {
                 realEstates = realEstateService.find(null, location, surfaceFrom, surfaceTo,
                         priceFrom, priceTo, realEstateTypeSearch, transactionTypeSearch);
             }

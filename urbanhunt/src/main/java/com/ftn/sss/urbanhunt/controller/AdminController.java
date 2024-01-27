@@ -52,6 +52,9 @@ public class AdminController {
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
         }
+        if (user.getRole() == Role.ADMINISTRATOR) {
+            return new ResponseEntity<>("Administrator can't be deactivated", HttpStatus.BAD_REQUEST);
+        }
 
         boolean success = userService.deactivateUser(user.getId()) == 1;
 

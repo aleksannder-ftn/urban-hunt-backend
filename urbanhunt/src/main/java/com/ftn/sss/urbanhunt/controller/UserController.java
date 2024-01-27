@@ -90,6 +90,9 @@ public class UserController {
     public ResponseEntity<UserTokenState> loginUser(@RequestBody Map<String, Object> payload) {
         String jwt = "";
         Optional<User> user = userService.findUserByUsername(payload.get("username").toString());
+        if(user.get().isActive() == false) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         String password = payload.get("password").toString();
         if (user.isPresent()) {
             if (password.matches(user.get().getPassword())) { // No password encoding for now. Password is stored as raw string.
