@@ -22,11 +22,6 @@ public class Guest extends User {
    @Column(name = "is_liked")
    private Map<RealEstate, Boolean> realEstateRating;
 
-   @ElementCollection
-   @CollectionTable(name = "guest_agent_rating", joinColumns = @JoinColumn(name = "guest_id"))
-   @MapKeyJoinColumn(name = "user_id")
-   @Column(name = "rating")
-   private Map<Agent, Integer> agentRating;
 
    @Override
    public boolean isAccountNonExpired() {

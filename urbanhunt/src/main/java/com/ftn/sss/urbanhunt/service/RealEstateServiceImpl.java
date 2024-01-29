@@ -191,7 +191,7 @@ public class RealEstateServiceImpl implements RealEstateService {
     public Float sumPricesForRentedRealEstates() {
         Float rentedPrices = realEstateRepository.sumPricesOfRentedRealEstates();
         if(rentedPrices != null) {
-            rentedPrices /= 1000;
+            rentedPrices /= 100;
         }
         return rentedPrices;
     }

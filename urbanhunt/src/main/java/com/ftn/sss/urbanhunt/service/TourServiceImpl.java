@@ -59,8 +59,8 @@ public class TourServiceImpl implements TourService {
             if (tour.getEndTime().isBefore(LocalDateTime.now())) {
                 tour.setFinished(true);
                 tourRepository.save(tour);
-                String message = String.format("{\"type\":\"FINISHED_TOUR_RATE_AGENT\", \"id\":%d, \"guestId\":%d}",
-                        tour.getAgent().getId(), tour.getGuest().getId());
+                String message = String.format("{\"type\":\"FINISHED_TOUR_RATE_AGENT\", \"id\":%d, \"guestId\":%d, \"realEstateId\":%d}",
+                        tour.getAgent().getId(), tour.getGuest().getId(), tour.getRealEstate().getId());
                 webSocketClient.sendMessage(message);
             }
         }
