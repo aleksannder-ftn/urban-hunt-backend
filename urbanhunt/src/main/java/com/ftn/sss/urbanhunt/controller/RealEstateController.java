@@ -200,7 +200,7 @@ public class RealEstateController {
     public ResponseEntity<?> rentOrBuyRealEstate(@RequestParam String caseString, @RequestParam Long realEstateId) {
         try {
             RealEstate realEstate = realEstateService.findRealEstateById(realEstateId);
-            if(!realEstate.isActive() || (realEstate.getRented() || realEstate.getSold())) {
+            if(!realEstate.isActive()) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             if(caseString.equals("RENT")) {
