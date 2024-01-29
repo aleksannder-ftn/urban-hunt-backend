@@ -29,7 +29,7 @@ public class TourScheduler {
         return instant.toEpochMilli();
     }
 
-    @Scheduled(fixedRate = 1800000)
+    @Scheduled(fixedRate = 60000)
     public void updateTourStatus() {
         tourService.updateTourFinished();
     }

@@ -92,6 +92,12 @@
 			<version>1.7.16</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.java-websocket</groupId>
+			<artifactId>Java-WebSocket</artifactId>
+			<version>1.5.1</version> <!-- Use the latest version -->
+		</dependency>
+
 	</dependencies>
 
 	<build>
