@@ -1,6 +1,7 @@
 package com.ftn.sss.urbanhunt.service.interfaces;
 
 import com.ftn.sss.urbanhunt.model.Agent;
+import com.ftn.sss.urbanhunt.model.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,6 @@ public interface AgentService {
 
     List<Agent> findAllAgentsByAgencyId(Long agencyId);
     List<Agent> findMostPopularAgentsByAgencyId(Long agencyId);
+
+    Object findAgentByRealEstate(Long realEstateId);
 }

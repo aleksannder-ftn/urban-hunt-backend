@@ -6,8 +6,12 @@ import com.ftn.sss.urbanhunt.service.interfaces.RealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class WebSocketController {
@@ -21,10 +25,11 @@ public class WebSocketController {
         this.realEstateService = realEstateService;
     }
 
-    @MessageMapping("/sendAgentNotification/{realEstateId}")
-    public void sendAgentNotification(@DestinationVariable Long realEstateId, Notification notification) {
+    @MessageMapping("/sendAgentNotification")
+    @SendTo("/topic/notifications")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public void sendAgentNotification(@RequestParam Long realEstateId) {
         Agent agent = realEstateService.findAgentById(realEstateId);
-        template.convertAndSend("/topic/agent/notification/" + agent.getId(), notification);
+        template.convertAndSend("/topic/agent/notification/" + agent.getId(), "ASD");
     }
-
 }

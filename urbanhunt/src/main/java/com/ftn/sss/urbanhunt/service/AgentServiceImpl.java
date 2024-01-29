@@ -2,6 +2,7 @@ package com.ftn.sss.urbanhunt.service;
 
 import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.model.Agent;
+import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.repository.interfaces.AgentRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
@@ -26,6 +27,11 @@ public class AgentServiceImpl implements AgentService {
     public Agent saveAgent(Agent agent) {
         agent.setActive(true);
         return agentRepository.save(agent);
+    }
+
+    @Override
+    public Object findAgentByRealEstate(Long id) {
+        return agentRepository.findAgentByRealEstate(id);
     }
 
     @Override
