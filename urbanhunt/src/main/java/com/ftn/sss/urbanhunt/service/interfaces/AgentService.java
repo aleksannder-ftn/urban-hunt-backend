@@ -1,7 +1,6 @@
 package com.ftn.sss.urbanhunt.service.interfaces;
 
 import com.ftn.sss.urbanhunt.model.Agent;
-import com.ftn.sss.urbanhunt.model.User;
 
 import java.util.List;
 import java.util.Optional;

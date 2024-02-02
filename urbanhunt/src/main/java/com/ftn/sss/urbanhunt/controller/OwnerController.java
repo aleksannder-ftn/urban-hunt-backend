@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @RestController
@@ -140,7 +139,7 @@ public class OwnerController {
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<List<RealEstateDetailedDTO>> findMostPopularRealEstatesByAgencyId(@RequestParam Long agencyId) {
         try {
-            List<RealEstateDetailedDTO> dtoList = realEstateService.findAllByPopularity();
+            List<RealEstateDetailedDTO> dtoList = realEstateService.findAllByPopularity(agencyId);
             return ResponseEntity.ok(dtoList);
         } catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

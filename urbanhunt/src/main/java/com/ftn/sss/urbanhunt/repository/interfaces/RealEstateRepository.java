@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public interface RealEstateRepository extends JpaRepository<RealEstate, Long>, J
                     "AND t.finished = false " +
                     "GROUP BY re.real_estate_id " +
                     "ORDER BY acceptedTours DESC")
-    List<Object[]> findAllByPopularity();
+    List<Object[]> findAllByPopularity(Long agencyId);
 
     @Modifying
     @Transactional

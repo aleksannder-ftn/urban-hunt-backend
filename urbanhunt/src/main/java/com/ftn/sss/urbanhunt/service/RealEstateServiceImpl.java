@@ -144,8 +144,8 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public List<RealEstateDetailedDTO> findAllByPopularity() {
-        List<Object[]> resultList = realEstateRepository.findAllByPopularity();
+    public List<RealEstateDetailedDTO> findAllByPopularity(Long agencyId) {
+        List<Object[]> resultList = realEstateRepository.findAllByPopularity(agencyId);
         List<RealEstateDetailedDTO> resultDTOList = new ArrayList<>();
 
         for (Object[] result : resultList) {

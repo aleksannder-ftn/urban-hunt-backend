@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/owner/**").hasAuthority("OWNER")
                         .requestMatchers("/guest/**").hasAuthority("GUEST")
                         .requestMatchers("/admin/**").hasAuthority("ADMINISTRATOR")
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint((request, response, ex) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage())))

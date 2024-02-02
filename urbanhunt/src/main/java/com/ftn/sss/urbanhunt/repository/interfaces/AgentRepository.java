@@ -2,7 +2,6 @@ package com.ftn.sss.urbanhunt.repository.interfaces;
 
 import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.model.Agent;
-import com.ftn.sss.urbanhunt.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

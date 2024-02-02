@@ -7,7 +7,6 @@ import com.ftn.sss.urbanhunt.service.interfaces.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.ftn.sss.urbanhunt.dto.mapper;
 
 import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateBasicDTO;
-import com.ftn.sss.urbanhunt.dto.realEstate.RealEstateDetailedDTO;
 import com.ftn.sss.urbanhunt.model.Agent;
 import com.ftn.sss.urbanhunt.model.Image;
 import com.ftn.sss.urbanhunt.model.RealEstate;

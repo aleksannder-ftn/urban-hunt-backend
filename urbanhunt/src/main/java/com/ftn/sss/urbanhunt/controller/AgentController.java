@@ -2,8 +2,6 @@ package com.ftn.sss.urbanhunt.controller;
 
 import com.ftn.sss.urbanhunt.dto.mapper.AgencyMapper;
 import com.ftn.sss.urbanhunt.model.Agency;
-import com.ftn.sss.urbanhunt.model.Agent;
-import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 

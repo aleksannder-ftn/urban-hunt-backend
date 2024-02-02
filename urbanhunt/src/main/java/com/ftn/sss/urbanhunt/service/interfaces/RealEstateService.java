@@ -24,7 +24,7 @@ public interface RealEstateService {
     RealEstate editRealEstate(RealEstateBasicDTO requestDTO, AgencyService agencyService, ImageService imageService);
     int activateRealEstate(Long id);
     int deactivateRealEstate(Long id);
-    List<RealEstateDetailedDTO> findAllByPopularity();
+    List<RealEstateDetailedDTO> findAllByPopularity(Long agencyId);
     void rentRealEstate(Long realEstateId);
     void buyRealEstate(Long realEstateId);
     Float sumPricesForSoldRealEstates();

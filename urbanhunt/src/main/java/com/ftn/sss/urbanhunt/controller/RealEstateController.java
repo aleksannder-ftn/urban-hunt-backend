@@ -182,6 +182,7 @@ public class RealEstateController {
     }
 
     @GetMapping(value="checkIsLiked")
+    @PreAuthorize("hasAuthority('GUEST')")
     public ResponseEntity<Boolean> checkIsLiked(@RequestParam Long realEstateId, HttpServletRequest request) {
         try {
             Long userId = (Long) request.getAttribute("userId");

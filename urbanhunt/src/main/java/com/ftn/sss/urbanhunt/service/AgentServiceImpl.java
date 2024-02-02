@@ -2,7 +2,6 @@ package com.ftn.sss.urbanhunt.service;
 
 import com.ftn.sss.urbanhunt.model.Agency;
 import com.ftn.sss.urbanhunt.model.Agent;
-import com.ftn.sss.urbanhunt.model.User;
 import com.ftn.sss.urbanhunt.repository.interfaces.AgentRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.AgencyService;
 import com.ftn.sss.urbanhunt.service.interfaces.AgentService;
