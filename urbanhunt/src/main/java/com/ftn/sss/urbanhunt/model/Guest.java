@@ -22,6 +22,7 @@ public class Guest extends User {
    @Column(name = "is_liked")
    private Map<RealEstate, Boolean> realEstateRating;
 
+
    @Override
    public boolean isAccountNonExpired() {
       return false;

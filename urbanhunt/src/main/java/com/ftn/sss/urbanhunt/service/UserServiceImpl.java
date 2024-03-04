@@ -1,10 +1,7 @@
 package com.ftn.sss.urbanhunt.service;
 
 import com.ftn.sss.urbanhunt.dto.user.UserBasicDTO;
-import com.ftn.sss.urbanhunt.model.Administrator;
-import com.ftn.sss.urbanhunt.model.Guest;
-import com.ftn.sss.urbanhunt.model.Owner;
-import com.ftn.sss.urbanhunt.model.User;
+import com.ftn.sss.urbanhunt.model.*;
 import com.ftn.sss.urbanhunt.model.enums.Role;
 import com.ftn.sss.urbanhunt.repository.interfaces.UserRepository;
 import com.ftn.sss.urbanhunt.service.interfaces.UserService;
@@ -40,6 +37,7 @@ public class UserServiceImpl implements UserService {
             case GUEST ->  new Guest();
             case ADMINISTRATOR -> new Administrator();
             case OWNER -> new Owner();
+            case AGENT -> new Agent();
             default -> throw new IllegalStateException("Unexpected value: " + role);
         };
 

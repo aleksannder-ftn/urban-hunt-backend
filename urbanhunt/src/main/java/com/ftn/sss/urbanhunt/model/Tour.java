@@ -23,21 +23,24 @@ public class Tour {
     @Column(name="start_time", nullable = false)
     private LocalDateTime startTime;
 
+    @Column(name="end_time", nullable = false)
+    private LocalDateTime endTime;
+
     @Column(name="accepted", nullable = false)
     private boolean accepted;
 
     @Column(name="finished", nullable = false)
     private boolean finished;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private RealEstate realEstate;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Agent agent;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Agency agency;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Guest guest;
 }

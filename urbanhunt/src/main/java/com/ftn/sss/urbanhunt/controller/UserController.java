@@ -13,7 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 import java.util.Optional;
@@ -87,6 +90,9 @@ public class UserController {
     public ResponseEntity<UserTokenState> loginUser(@RequestBody Map<String, Object> payload) {
         String jwt = "";
         Optional<User> user = userService.findUserByUsername(payload.get("username").toString());
+        if(user.get().isActive() == false) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         String password = payload.get("password").toString();
         if (user.isPresent()) {
             if (password.matches(user.get().getPassword())) { // No password encoding for now. Password is stored as raw string.

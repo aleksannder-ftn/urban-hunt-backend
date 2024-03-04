@@ -74,15 +74,15 @@ public class AgencyMapper {
         return agency;
     }
 /*
-    static Agency getAgencyEntityDetailed(AgencyDetailedDTO agencyDetailedDTO, Agency agency) {
+    static Agency getAgencyEntityDetailed(AgencyDetailedDTO agencyDetailedDTO, Agency agency, UserService userService) {
         agency.setId(agencyDetailedDTO.getId());
         agency.setName(agencyDetailedDTO.getName());
-        agency.setOwner(agencyDetailedDTO.getOwnerId());
+        agency.setOwner((Owner) userService.findUserById(agencyDetailedDTO.getOwnerId()));
         agency.setRealEstates(agencyDetailedDTO.getRealEstates());
         agency.setTours(agencyDetailedDTO.getTours());
         agency.setReport(agencyDetailedDTO.getReport());
 
         return agency;
-    } */
-
+    }
+*/
 }
