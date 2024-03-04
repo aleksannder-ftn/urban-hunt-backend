@@ -17,6 +17,9 @@ For our database we opted for **MySQL** as this was a small school project.
 ## API Documentation
 Clicking the link you can find the [API documentation](https://documenter.getpostman.com/view/30371859/2s9Yyy9eRE#15f46903-9ec6-4a04-ab00-3727a6104a7e) for this project  
 
+## Other parts of the project
+Clicking the link you can find the [Frontend portion](https://github.com/stjepanoviccc/frontend-urban-hunt) of this project  
+Clicking the link you can find the [Diagrams](https://github.com/stjepanoviccc/urban-hunt-diagrams) made for this project
 
 ## Our learning experiences on this project
 
